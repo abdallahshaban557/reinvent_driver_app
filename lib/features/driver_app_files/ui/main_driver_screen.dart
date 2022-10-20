@@ -38,7 +38,19 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                   },
                 ),
               ),
-              Center(child: Text('Transit')),
+              ListView.separated(
+                itemCount: 25,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(
+                  thickness: 1,
+                  color: Colors.black,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text('item $index'),
+                  );
+                },
+              )
             ],
           ),
         ));

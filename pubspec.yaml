@@ -40,6 +40,8 @@ dependencies:
   amplify_authenticator: ^1.0.0-0
   amplify_datastore: ^1.0.0-0
   amplify_api: ^1.0.0-0
+  logger: ^1.1.0
+  flutter_riverpod: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -14,6 +14,25 @@ class DriverScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Authenticator(
       child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: const TextTheme(
+            titleLarge: TextStyle(fontSize: 20),
+            titleMedium: TextStyle(fontSize: 20),
+            titleSmall: TextStyle(fontSize: 20),
+            headlineMedium: TextStyle(
+              fontSize: 30.0,
+            ),
+            bodySmall: TextStyle(
+              fontSize: 36.0,
+              fontFamily: 'Hind',
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 36.0,
+              fontFamily: 'Hind',
+            ),
+          ),
+        ),
         builder: Authenticator.builder(),
         home: isAmplifySuccessfullyConfigured
             ? const Scaffold(body: SafeArea(child: MainDriverScreen()))

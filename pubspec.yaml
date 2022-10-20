@@ -41,11 +41,14 @@ dependencies:
   amplify_datastore: ^1.0.0-0
   amplify_api: ^1.0.0-0
   logger: ^1.1.0
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.0.2
+  riverpod_annotation: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner:
+  riverpod_generator: ^1.0.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

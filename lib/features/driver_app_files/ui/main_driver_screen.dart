@@ -51,6 +51,9 @@ class OrderPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
       scrollable: true,
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,

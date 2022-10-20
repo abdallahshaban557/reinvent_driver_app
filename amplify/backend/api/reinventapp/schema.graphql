@@ -1,0 +1,108 @@
+type Restaurant
+  @model
+  @auth(
+    rules: [
+      #allow public to read menu items
+      { allow: public, operations: [read] }
+      #allow only admins full CRUD
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  description: String
+  menu: [MenuItem] @hasMany
+  order: [Order] @hasMany
+}
+
+type MenuItem
+  @model
+  @auth(
+    rules: [
+      #allow public to read menu items
+      { allow: public, operations: [read] }
+      #allow only admins full CRUD
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  restaurant: Restaurant @belongsTo
+}
+
+type Order
+  @model
+  @auth(
+    rules: [
+      # allow only customers to create/read orders - so no update after placing order
+      { allow: owner, ownerField: "customerID", operations: [create, read] }
+      { allow: owner, ownerField: "driver", operations: [read] }
+    ]
+  ) {
+  id: ID
+  customerID: String
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "customerID", operations: [read, create] }
+      ]
+    ) # only owner can read
+  customer: Customer @belongsTo
+  restaurant: Restaurant @belongsTo
+  orderitems: [OrderItem] @hasMany
+  # allow only drivers to update order status
+  orderstatus: OrderStatus
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "customerID", operations: [read] }
+        { allow: owner, ownerField: "driver", operations: [update, read] }
+      ]
+    )
+  driver: String
+    @auth(rules: [{ allow: owner, ownerField: "driver", operations: [read] }])
+  address: Address
+}
+
+enum OrderStatus {
+  NEW
+  INPROGRESS
+  ACCEPTED
+  ONROUTE
+  COMPLETED
+  CANCELLED
+}
+
+type OrderItem
+  @model
+  @auth(
+    rules: [{ allow: owner, ownerField: "customerID", operations: [create] }]
+  ) {
+  id: ID!
+  quantity: Int
+  customerID: String
+  menuitem: MenuItem
+  order: Order @belongsTo
+}
+
+type Customer @model @auth(rules: [{ allow: owner, ownerField: "id" }]) {
+  id: ID!
+    @auth(
+      rules: [{ allow: owner, ownerField: "id", operations: [create, read] }]
+    )
+  firstName: String!
+  lastName: String!
+  email: String!
+  orders: [Order] @hasMany
+  address: [Address] @hasMany
+}
+
+type Address @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  owner: String @auth(rules: [{ allow: owner, operations: [create, read] }])
+  customer: Customer @belongsTo
+}

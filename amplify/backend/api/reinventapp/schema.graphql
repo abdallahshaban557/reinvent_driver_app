@@ -51,6 +51,7 @@ type Order
   customer: Customer @belongsTo
   restaurant: Restaurant @belongsTo
   orderitems: [OrderItem] @hasMany
+  ordertotal: Float
   # allow only drivers to update order status
   orderstatus: OrderStatus
     @auth(

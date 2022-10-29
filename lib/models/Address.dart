@@ -24,15 +24,17 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
 
-/** This is an auto generated class representing the MenuItem type in your schema. */
+/** This is an auto generated class representing the Address type in your schema. */
 @immutable
-class MenuItem extends Model {
-  static const classType = const _MenuItemModelType();
+class Address extends Model {
+  static const classType = const _AddressModelType();
   final String id;
-  final String? _name;
-  final String? _description;
-  final double? _price;
-  final Restaurant? _restaurant;
+  final String? _street;
+  final String? _city;
+  final String? _state;
+  final String? _zip;
+  final String? _owner;
+  final Customer? _customer;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -44,9 +46,9 @@ class MenuItem extends Model {
     return id;
   }
   
-  String get name {
+  String get street {
     try {
-      return _name!;
+      return _street!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -57,13 +59,9 @@ class MenuItem extends Model {
     }
   }
   
-  String? get description {
-    return _description;
-  }
-  
-  double get price {
+  String get city {
     try {
-      return _price!;
+      return _city!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -74,8 +72,38 @@ class MenuItem extends Model {
     }
   }
   
-  Restaurant? get restaurant {
-    return _restaurant;
+  String get state {
+    try {
+      return _state!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get zip {
+    try {
+      return _zip!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String? get owner {
+    return _owner;
+  }
+  
+  Customer? get customer {
+    return _customer;
   }
   
   TemporalDateTime? get createdAt {
@@ -86,15 +114,17 @@ class MenuItem extends Model {
     return _updatedAt;
   }
   
-  const MenuItem._internal({required this.id, required name, description, required price, restaurant, createdAt, updatedAt}): _name = name, _description = description, _price = price, _restaurant = restaurant, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Address._internal({required this.id, required street, required city, required state, required zip, owner, customer, createdAt, updatedAt}): _street = street, _city = city, _state = state, _zip = zip, _owner = owner, _customer = customer, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory MenuItem({String? id, required String name, String? description, required double price, Restaurant? restaurant}) {
-    return MenuItem._internal(
+  factory Address({String? id, required String street, required String city, required String state, required String zip, String? owner, Customer? customer}) {
+    return Address._internal(
       id: id == null ? UUID.getUUID() : id,
-      name: name,
-      description: description,
-      price: price,
-      restaurant: restaurant);
+      street: street,
+      city: city,
+      state: state,
+      zip: zip,
+      owner: owner,
+      customer: customer);
   }
   
   bool equals(Object other) {
@@ -104,12 +134,14 @@ class MenuItem extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is MenuItem &&
+    return other is Address &&
       id == other.id &&
-      _name == other._name &&
-      _description == other._description &&
-      _price == other._price &&
-      _restaurant == other._restaurant;
+      _street == other._street &&
+      _city == other._city &&
+      _state == other._state &&
+      _zip == other._zip &&
+      _owner == other._owner &&
+      _customer == other._customer;
   }
   
   @override
@@ -119,12 +151,14 @@ class MenuItem extends Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("MenuItem {");
+    buffer.write("Address {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("name=" + "$_name" + ", ");
-    buffer.write("description=" + "$_description" + ", ");
-    buffer.write("price=" + (_price != null ? _price!.toString() : "null") + ", ");
-    buffer.write("restaurant=" + (_restaurant != null ? _restaurant!.toString() : "null") + ", ");
+    buffer.write("street=" + "$_street" + ", ");
+    buffer.write("city=" + "$_city" + ", ");
+    buffer.write("state=" + "$_state" + ", ");
+    buffer.write("zip=" + "$_zip" + ", ");
+    buffer.write("owner=" + "$_owner" + ", ");
+    buffer.write("customer=" + (_customer != null ? _customer!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -132,55 +166,56 @@ class MenuItem extends Model {
     return buffer.toString();
   }
   
-  MenuItem copyWith({String? id, String? name, String? description, double? price, Restaurant? restaurant}) {
-    return MenuItem._internal(
+  Address copyWith({String? id, String? street, String? city, String? state, String? zip, String? owner, Customer? customer}) {
+    return Address._internal(
       id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      price: price ?? this.price,
-      restaurant: restaurant ?? this.restaurant);
+      street: street ?? this.street,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      zip: zip ?? this.zip,
+      owner: owner ?? this.owner,
+      customer: customer ?? this.customer);
   }
   
-  MenuItem.fromJson(Map<String, dynamic> json)  
+  Address.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _name = json['name'],
-      _description = json['description'],
-      _price = (json['price'] as num?)?.toDouble(),
-      _restaurant = json['restaurant']?['serializedData'] != null
-        ? Restaurant.fromJson(new Map<String, dynamic>.from(json['restaurant']['serializedData']))
+      _street = json['street'],
+      _city = json['city'],
+      _state = json['state'],
+      _zip = json['zip'],
+      _owner = json['owner'],
+      _customer = json['customer']?['serializedData'] != null
+        ? Customer.fromJson(new Map<String, dynamic>.from(json['customer']['serializedData']))
         : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'street': _street, 'city': _city, 'state': _state, 'zip': _zip, 'owner': _owner, 'customer': _customer?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'street': _street, 'city': _city, 'state': _state, 'zip': _zip, 'owner': _owner, 'customer': _customer, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField NAME = QueryField(fieldName: "name");
-  static final QueryField DESCRIPTION = QueryField(fieldName: "description");
-  static final QueryField PRICE = QueryField(fieldName: "price");
-  static final QueryField RESTAURANT = QueryField(
-    fieldName: "restaurant",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Restaurant).toString()));
+  static final QueryField STREET = QueryField(fieldName: "street");
+  static final QueryField CITY = QueryField(fieldName: "city");
+  static final QueryField STATE = QueryField(fieldName: "state");
+  static final QueryField ZIP = QueryField(fieldName: "zip");
+  static final QueryField OWNER = QueryField(fieldName: "owner");
+  static final QueryField CUSTOMER = QueryField(
+    fieldName: "customer",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Customer).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "MenuItem";
-    modelSchemaDefinition.pluralName = "MenuItems";
+    modelSchemaDefinition.name = "Address";
+    modelSchemaDefinition.pluralName = "Addresses";
     
     modelSchemaDefinition.authRules = [
       AuthRule(
-        authStrategy: AuthStrategy.PUBLIC,
-        operations: [
-          ModelOperation.READ
-        ]),
-      AuthRule(
-        authStrategy: AuthStrategy.GROUPS,
-        groupClaim: "cognito:groups",
-        groups: [ "Admin" ],
+        authStrategy: AuthStrategy.OWNER,
+        ownerField: "owner",
+        identityClaim: "cognito:username",
         provider: AuthRuleProvider.USERPOOLS,
         operations: [
           ModelOperation.CREATE,
@@ -193,28 +228,40 @@ class MenuItem extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: MenuItem.NAME,
+      key: Address.STREET,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: MenuItem.DESCRIPTION,
+      key: Address.CITY,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Address.STATE,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Address.ZIP,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Address.OWNER,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: MenuItem.PRICE,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.double)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: MenuItem.RESTAURANT,
+      key: Address.CUSTOMER,
       isRequired: false,
-      targetName: "restaurantMenuId",
-      ofModelName: (Restaurant).toString()
+      targetName: "customerAddressId",
+      ofModelName: (Customer).toString()
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
@@ -233,11 +280,11 @@ class MenuItem extends Model {
   });
 }
 
-class _MenuItemModelType extends ModelType<MenuItem> {
-  const _MenuItemModelType();
+class _AddressModelType extends ModelType<Address> {
+  const _AddressModelType();
   
   @override
-  MenuItem fromJson(Map<String, dynamic> jsonData) {
-    return MenuItem.fromJson(jsonData);
+  Address fromJson(Map<String, dynamic> jsonData) {
+    return Address.fromJson(jsonData);
   }
 }

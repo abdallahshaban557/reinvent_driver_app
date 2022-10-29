@@ -1,6 +1,11 @@
+import 'package:amplify_api/model_mutations.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reinvent_driver_app/main.dart';
+import 'package:reinvent_driver_app/models/ModelProvider.dart';
 
 class MainDriverScreen extends StatefulWidget {
   const MainDriverScreen({super.key});
@@ -27,15 +32,46 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
           body: TabBarView(
             children: [
               Center(
-                child: ElevatedButton(
-                  child: const Text("Open Popup"),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return OrderPopup();
-                        });
-                  },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: const Text("Open Popup"),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return OrderPopup();
+                            });
+                      },
+                    ),
+                    const SignOutButton(),
+                    ElevatedButton(
+                        onPressed: () async {
+                          //print current authenticated user
+                          print(await Amplify.Auth.getCurrentUser());
+                        },
+                        child: const Text('print user')),
+                    ElevatedButton(
+                      child: const Text("Create Order"),
+                      onPressed: () async {
+                        final order = Order(
+                            ordertotal: 100, orderstatus: OrderStatus.NEW);
+                        final request = ModelMutations.create(order);
+                        final response = await Amplify.API
+                            .mutate(
+                              request: request,
+                            )
+                            .response;
+                        final createdOrder = response.data;
+                        print(createdOrder?.ordertotal);
+                        if (createdOrder == null) {
+                          safePrint('errors: ${response.errors}');
+                          return;
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
               HistoryViewWidget()
@@ -45,15 +81,17 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
   }
 }
 
-class HistoryViewWidget extends StatelessWidget {
+class HistoryViewWidget extends ConsumerWidget {
   const HistoryViewWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final getOrders = ref.watch(getListOfOrdersProvider);
+    // print(value);
     return ListView.separated(
-      itemCount: 25,
+      itemCount: getOrders.value?.length ?? 0,
       separatorBuilder: (BuildContext context, int index) => const Divider(
         thickness: 1,
         color: Colors.black,
@@ -66,7 +104,7 @@ class HistoryViewWidget extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text('Customer $index',
+                  Text(getOrders.value![index]!.ordertotal.toString(),
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
@@ -80,7 +118,7 @@ class HistoryViewWidget extends StatelessWidget {
                               .fontSize)),
                 ],
               ),
-              Text('something_else $index',
+              Text('${getOrders.value![index]?.ordertotal}',
                   style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.titleMedium!.fontSize)),

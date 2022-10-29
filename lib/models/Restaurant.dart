@@ -153,6 +153,10 @@ class Restaurant extends Model {
   Map<String, dynamic> toJson() => {
     'id': id, 'name': _name, 'description': _description, 'menu': _menu?.map((MenuItem? e) => e?.toJson()).toList(), 'order': _order?.map((Order? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
+  
+  Map<String, Object?> toMap() => {
+    'id': id, 'name': _name, 'description': _description, 'menu': _menu, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+  };
 
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField NAME = QueryField(fieldName: "name");
@@ -170,6 +174,14 @@ class Restaurant extends Model {
     modelSchemaDefinition.authRules = [
       AuthRule(
         authStrategy: AuthStrategy.PUBLIC,
+        operations: [
+          ModelOperation.READ
+        ]),
+      AuthRule(
+        authStrategy: AuthStrategy.GROUPS,
+        groupClaim: "cognito:groups",
+        groups: [ "Admin" ],
+        provider: AuthRuleProvider.USERPOOLS,
         operations: [
           ModelOperation.CREATE,
           ModelOperation.UPDATE,

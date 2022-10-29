@@ -30,6 +30,7 @@ class OrderItem extends Model {
   static const classType = const _OrderItemModelType();
   final String id;
   final int? _quantity;
+  final String? _customerID;
   final Order? _order;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -46,6 +47,10 @@ class OrderItem extends Model {
     return _quantity;
   }
   
+  String? get customerID {
+    return _customerID;
+  }
+  
   Order? get order {
     return _order;
   }
@@ -58,12 +63,13 @@ class OrderItem extends Model {
     return _updatedAt;
   }
   
-  const OrderItem._internal({required this.id, quantity, order, createdAt, updatedAt}): _quantity = quantity, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
+  const OrderItem._internal({required this.id, quantity, customerID, order, createdAt, updatedAt}): _quantity = quantity, _customerID = customerID, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory OrderItem({String? id, int? quantity, Order? order}) {
+  factory OrderItem({String? id, int? quantity, String? customerID, Order? order}) {
     return OrderItem._internal(
       id: id == null ? UUID.getUUID() : id,
       quantity: quantity,
+      customerID: customerID,
       order: order);
   }
   
@@ -77,6 +83,7 @@ class OrderItem extends Model {
     return other is OrderItem &&
       id == other.id &&
       _quantity == other._quantity &&
+      _customerID == other._customerID &&
       _order == other._order;
   }
   
@@ -90,6 +97,7 @@ class OrderItem extends Model {
     buffer.write("OrderItem {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("quantity=" + (_quantity != null ? _quantity!.toString() : "null") + ", ");
+    buffer.write("customerID=" + "$_customerID" + ", ");
     buffer.write("order=" + (_order != null ? _order!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -98,16 +106,18 @@ class OrderItem extends Model {
     return buffer.toString();
   }
   
-  OrderItem copyWith({String? id, int? quantity, Order? order}) {
+  OrderItem copyWith({String? id, int? quantity, String? customerID, Order? order}) {
     return OrderItem._internal(
       id: id ?? this.id,
       quantity: quantity ?? this.quantity,
+      customerID: customerID ?? this.customerID,
       order: order ?? this.order);
   }
   
   OrderItem.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _quantity = (json['quantity'] as num?)?.toInt(),
+      _customerID = json['customerID'],
       _order = json['order']?['serializedData'] != null
         ? Order.fromJson(new Map<String, dynamic>.from(json['order']['serializedData']))
         : null,
@@ -115,11 +125,16 @@ class OrderItem extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'quantity': _quantity, 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+  };
+  
+  Map<String, Object?> toMap() => {
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField QUANTITY = QueryField(fieldName: "quantity");
+  static final QueryField CUSTOMERID = QueryField(fieldName: "customerID");
   static final QueryField ORDER = QueryField(
     fieldName: "order",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Order).toString()));
@@ -130,14 +145,11 @@ class OrderItem extends Model {
     modelSchemaDefinition.authRules = [
       AuthRule(
         authStrategy: AuthStrategy.OWNER,
-        ownerField: "id",
+        ownerField: "customerID",
         identityClaim: "cognito:username",
         provider: AuthRuleProvider.USERPOOLS,
         operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
+          ModelOperation.CREATE
         ])
     ];
     
@@ -147,6 +159,12 @@ class OrderItem extends Model {
       key: OrderItem.QUANTITY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: OrderItem.CUSTOMERID,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(

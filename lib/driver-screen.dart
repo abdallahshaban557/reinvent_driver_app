@@ -18,8 +18,8 @@ class DriverScreen extends StatelessWidget {
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(
             titleLarge: TextStyle(fontSize: 20),
-            titleMedium: TextStyle(fontSize: 20),
-            titleSmall: TextStyle(fontSize: 20),
+            titleMedium: TextStyle(fontSize: 15),
+            titleSmall: TextStyle(fontSize: 10),
             headlineMedium: TextStyle(
               fontSize: 30.0,
             ),

@@ -38,22 +38,61 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                   },
                 ),
               ),
-              ListView.separated(
-                itemCount: 25,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
-                  thickness: 1,
-                  color: Colors.black,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text('item $index'),
-                  );
-                },
-              )
+              HistoryViewWidget()
             ],
           ),
         ));
+  }
+}
+
+class HistoryViewWidget extends StatelessWidget {
+  const HistoryViewWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: 25,
+      separatorBuilder: (BuildContext context, int index) => const Divider(
+        thickness: 1,
+        color: Colors.black,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('Customer $index',
+                      style: TextStyle(
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .fontSize)),
+                  Text('order # $index',
+                      style: TextStyle(
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .fontSize)),
+                ],
+              ),
+              Text('something_else $index',
+                  style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.titleMedium!.fontSize)),
+              Text('Date $index',
+                  style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.titleMedium!.fontSize)),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

@@ -22,12 +22,12 @@ Future<List<Order?>> getListOfOrders(GetListOfOrdersRef ref) async {
 
     final orders = response.data?.items;
     if (orders == null) {
-      print('errors: ${response.errors}');
+      safePrint('errors: ${response.errors}');
       return <Order?>[];
     }
     return <Order?>[];
   } on ApiException catch (e) {
-    print('Query failed: $e');
+    safePrint('Query failed: $e');
   }
   return <Order?>[];
 }

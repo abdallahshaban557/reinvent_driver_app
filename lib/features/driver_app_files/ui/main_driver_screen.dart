@@ -57,13 +57,10 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                         final order = Order(
                             ordertotal: 100, orderstatus: OrderStatus.NEW);
                         final request = ModelMutations.create(order);
-                        final response = await Amplify.API
-                            .mutate(
-                              request: request,
-                            )
-                            .response;
+                        final response =
+                            await Amplify.API.mutate(request: request).response;
                         final createdOrder = response.data;
-                        print(createdOrder?.ordertotal);
+                        safePrint(createdOrder?.ordertotal);
                         if (createdOrder == null) {
                           safePrint('errors: ${response.errors}');
                           return;

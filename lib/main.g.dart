@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $getListOfOrdersHash() => r'a5664d4237487564e7b8cec6fabc101b5fb46df7';
+String $getListOfOrdersHash() => r'6b83e63978851616bede0673f326a63c1ef1be25';
 
 /// See also [getListOfOrders].
 final getListOfOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(

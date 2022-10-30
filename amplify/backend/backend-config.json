@@ -1,6 +1,6 @@
 {
   "auth": {
-    "reinventapp723d7000": {
+    "reinventapp9ebe7d3f": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -32,7 +32,7 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "reinventapp723d7000",
+          "resourceName": "reinventapp9ebe7d3f",
           "attributes": [
             "UserPoolId"
           ]
@@ -41,19 +41,22 @@
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
-              "apiKeyExpirationDate": "2023-10-29T22:03:34.266Z",
-              "description": "reinventapikey"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authreinventapp9ebe7d3f"
             }
           },
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authreinventapp723d7000"
+              "authenticationType": "API_KEY",
+              "apiKeyConfig": {
+                "apiKeyExpirationDays": 365,
+                "apiKeyExpirationDate": "2023-10-30T02:53:49.617Z",
+                "description": ""
               }
+            },
+            {
+              "authenticationType": "AWS_IAM"
             }
           ]
         }

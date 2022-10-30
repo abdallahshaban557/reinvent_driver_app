@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:amplify_api/model_mutations.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -54,15 +56,28 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                     ElevatedButton(
                       child: const Text("Create Order"),
                       onPressed: () async {
-                        final order = Order(
-                            ordertotal: 100, orderstatus: OrderStatus.NEW);
-                        final request = ModelMutations.create(order);
-                        final response =
-                            await Amplify.API.mutate(request: request).response;
-                        final createdOrder = response.data;
-                        safePrint(createdOrder?.ordertotal);
+                        // final order = Order(ordertotal: 10.0, id: 'testing');
+                        // final request = ModelMutations.create(order);
+                        // final response =
+                        //     await Amplify.API.mutate(request: request).response;
+                        double id = 1.11312;
+                        String graphQLDocumentString = '''
+                          mutation MyMutation {
+                          createOrder(input: {ordertotal: $id}) {
+                            id
+                          }
+                        }
+                        ''';
+                        final operation = await Amplify.API.mutate<String>(
+                          request: GraphQLRequest(
+                            document: graphQLDocumentString,
+                            apiName: 'reinventapp',
+                          ),
+                        );
+                        final createdOrder = operation.response;
+                        safePrint(createdOrder);
                         if (createdOrder == null) {
-                          safePrint('errors: ${response.errors}');
+                          safePrint('errors: error');
                           return;
                         }
                       },
@@ -85,7 +100,7 @@ class HistoryViewWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final getOrders = ref.watch(getListOfOrdersProvider);
-    // print(value);
+    print(getOrders.value);
     return ListView.separated(
       itemCount: getOrders.value?.length ?? 0,
       separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -100,7 +115,7 @@ class HistoryViewWidget extends ConsumerWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(getOrders.value![index]!.ordertotal.toString(),
+                  Text(getOrders.value![index]!.orderstatus.toString(),
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme

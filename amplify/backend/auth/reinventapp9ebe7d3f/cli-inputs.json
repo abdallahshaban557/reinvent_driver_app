@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "reinventapp723d7000_identitypool_723d7000",
+    "identityPoolName": "reinventapp9ebe7d3f_identitypool_9ebe7d3f",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "reinve723d7000",
-    "userPoolName": "reinventapp723d7000_userpool_723d7000",
+    "resourceNameTruncated": "reinve9ebe7d3f",
+    "userPoolName": "reinventapp9ebe7d3f_userpool_9ebe7d3f",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,29 +31,15 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "reinve723d7000_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "reinve9ebe7d3f_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "723d7000",
-    "resourceName": "reinventapp723d7000",
+    "sharedId": "9ebe7d3f",
+    "resourceName": "reinventapp9ebe7d3f",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": []
+    "useEnabledMfas": true
   }
-}
+}  

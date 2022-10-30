@@ -19,5 +19,48 @@
         "reinventapp": {}
       }
     }
+  },
+  "devlight": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-reinventapp-devlight-191819-authRole",
+      "UnauthRoleArn": "arn:aws:iam::613607431007:role/amplify-reinventapp-devlight-191819-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::613607431007:role/amplify-reinventapp-devlight-191819-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-reinventapp-devlight-191819-deployment",
+      "UnauthRoleName": "amplify-reinventapp-devlight-191819-unauthRole",
+      "StackName": "amplify-reinventapp-devlight-191819",
+      "StackId": "arn:aws:cloudformation:us-west-2:613607431007:stack/amplify-reinventapp-devlight-191819/20260830-57f9-11ed-a061-025eb83456df",
+      "AmplifyAppId": "d1iuwkgtnx9apk"
+    },
+    "categories": {
+      "auth": {
+        "reinventapp723d7000": {},
+        "reinventapp9ebe7d3f": {}
+      },
+      "api": {
+        "reinventapp": {}
+      }
+    }
+  },
+  "updatedev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-reinventapp-updatedev-194245-authRole",
+      "UnauthRoleArn": "arn:aws:iam::613607431007:role/amplify-reinventapp-updatedev-194245-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::613607431007:role/amplify-reinventapp-updatedev-194245-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-reinventapp-updatedev-194245-deployment",
+      "UnauthRoleName": "amplify-reinventapp-updatedev-194245-unauthRole",
+      "StackName": "amplify-reinventapp-updatedev-194245",
+      "StackId": "arn:aws:cloudformation:us-west-2:613607431007:stack/amplify-reinventapp-updatedev-194245/8ea77e30-57fc-11ed-ab9a-021fb13c0537",
+      "AmplifyAppId": "d1iuwkgtnx9apk"
+    },
+    "categories": {
+      "auth": {
+        "reinventapp9ebe7d3f": {}
+      },
+      "api": {
+        "reinventapp": {}
+      }
+    }
   }
 }

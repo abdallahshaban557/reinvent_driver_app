@@ -205,7 +205,8 @@ class Order extends Model {
         provider: AuthRuleProvider.USERPOOLS,
         operations: [
           ModelOperation.CREATE,
-          ModelOperation.READ
+          ModelOperation.READ,
+          ModelOperation.UPDATE
         ]),
       AuthRule(
         authStrategy: AuthStrategy.OWNER,

@@ -60,11 +60,7 @@ type Order
   orderstatus: OrderStatus
     @auth(
       rules: [
-        {
-          allow: owner
-          ownerField: "customerID"
-          operations: [read, create, update]
-        }
+        { allow: owner, ownerField: "customerID" }
         {
           allow: owner
           ownerField: "driver"

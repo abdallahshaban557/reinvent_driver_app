@@ -43,6 +43,7 @@ dependencies:
   logger: ^1.1.0
   flutter_riverpod: ^2.0.2
   riverpod_annotation: ^1.0.4
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

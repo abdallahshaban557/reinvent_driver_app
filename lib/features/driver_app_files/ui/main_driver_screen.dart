@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:amplify_api/model_mutations.dart';
@@ -5,6 +6,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:reinvent_driver_app/main.dart';
 import 'package:reinvent_driver_app/models/ModelProvider.dart';
 
@@ -63,23 +65,27 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                         double id = 1.11312;
                         String graphQLDocumentString = '''
                           mutation MyMutation {
-                          createOrder(input: {ordertotal: $id}) {
+                          createOrder(input: {ordertotal: $id, orderstatus: NEW}) {
                             id
                           }
                         }
                         ''';
-                        final operation = await Amplify.API.mutate<String>(
+                        final operation = Amplify.API.mutate<Order>(
                           request: GraphQLRequest(
                             document: graphQLDocumentString,
                             apiName: 'reinventapp',
+                            decodePath: 'createOrder',
+                            modelType: Order.classType,
                           ),
                         );
-                        final createdOrder = operation.response;
-                        safePrint(createdOrder);
+                        final response = await operation.response;
+                        final createdOrder = response.data;
+                        safePrint(createdOrder.toString());
+
                         if (createdOrder == null) {
                           safePrint('errors: error');
                           return;
-                        }
+                        } else {}
                       },
                     ),
                   ],
@@ -100,7 +106,7 @@ class HistoryViewWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final getOrders = ref.watch(getListOfOrdersProvider);
-    print(getOrders.value);
+
     return ListView.separated(
       itemCount: getOrders.value?.length ?? 0,
       separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -108,6 +114,10 @@ class HistoryViewWidget extends ConsumerWidget {
         color: Colors.black,
       ),
       itemBuilder: (BuildContext context, int index) {
+        safePrint(getOrders.value![index]!.customerID);
+        final df = DateFormat('dd-MM-yyyy a');
+        TemporalDateTime? myvalue = getOrders.value![index]!.createdAt;
+        //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
         return ListTile(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -121,7 +131,7 @@ class HistoryViewWidget extends ConsumerWidget {
                               .textTheme
                               .titleMedium!
                               .fontSize)),
-                  Text('order # $index',
+                  Text('order # ${getOrders.value![index]!.id.split('-')[0]}',
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
@@ -133,7 +143,7 @@ class HistoryViewWidget extends ConsumerWidget {
                   style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.titleMedium!.fontSize)),
-              Text('Date $index',
+              Text('Date ${getOrders.value![index]!.createdAt!}',
                   style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.titleMedium!.fontSize)),

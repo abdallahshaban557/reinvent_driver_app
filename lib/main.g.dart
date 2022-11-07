@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $getListOfOrdersHash() => r'b0e49523cf64e047c5d0884425745f4eeb93984c';
+String $getListOfOrdersHash() => r'8b9b2f06625938cb89d7762bf0458123603fadb8';
 
 /// See also [getListOfOrders].
 final getListOfOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(
@@ -40,3 +40,15 @@ final getListOfOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(
       : $getListOfOrdersHash,
 );
 typedef GetListOfOrdersRef = AutoDisposeFutureProviderRef<List<Order?>>;
+String $getListOfAssignedOrdersHash() =>
+    r'81a57c79ac47037eca2dbcaf01fddede4cedb672';
+
+/// See also [getListOfAssignedOrders].
+final getListOfAssignedOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(
+  getListOfAssignedOrders,
+  name: r'getListOfAssignedOrdersProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $getListOfAssignedOrdersHash,
+);
+typedef GetListOfAssignedOrdersRef = AutoDisposeFutureProviderRef<List<Order?>>;

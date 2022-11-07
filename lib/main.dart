@@ -34,6 +34,29 @@ Future<List<Order?>> getListOfOrders(GetListOfOrdersRef ref) async {
   return <Order?>[];
 }
 
+@riverpod
+Future<List<Order?>> getListOfAssignedOrders(
+    GetListOfAssignedOrdersRef ref) async {
+  try {
+    final userDetails = await Amplify.Auth.getCurrentUser();
+    final username = userDetails.username;
+    final predicate = Order.DRIVER.eq(username).and(
+        Order.ORDERSTATUS.eq('INPROGRESS').or(Order.ORDERSTATUS.eq('ONROUTE')));
+    final request = ModelQueries.list(Order.classType, where: predicate);
+    //final request = ModelQueries.list(Order.classType);
+    final response = await Amplify.API.query(request: request).response;
+
+    final orders = response.data?.items;
+    if (orders == null) {
+      return <Order?>[];
+    }
+    return orders;
+  } on ApiException catch (e) {
+    safePrint('Query failed: $e');
+  }
+  return <Order?>[];
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   bool isAmplifySuccessfullyConfigured = false;

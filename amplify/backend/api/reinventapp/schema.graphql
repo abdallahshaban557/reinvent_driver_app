@@ -36,7 +36,7 @@ type Order
   @model
   @auth(
     rules: [
-      # allow only customers to create/read orders - so no update after placing order
+      # allow only customers to create/read/update orders
       {
         allow: owner
         ownerField: "customerID"
@@ -45,11 +45,11 @@ type Order
       { allow: owner, ownerField: "driver", operations: [read] }
     ]
   ) {
-  id: ID
+  orderID: ID
   customerID: String
     @auth(
       rules: [
-        { allow: owner, ownerField: "customerID", operations: [read, delete] }
+        { allow: owner, ownerField: "customerID", operations: [read, create] }
       ]
     ) # only owner can read
   customer: Customer @belongsTo
@@ -58,21 +58,20 @@ type Order
   ordertotal: Float
   # allow only drivers to update order status
   orderstatus: OrderStatus
+    @default(value: "NEW")
     @auth(
       rules: [
-        {
-          allow: owner
-          ownerField: "customerID"
-          operations: [read, create, update]
-        }
-        {
-          allow: owner
-          ownerField: "driver"
-          operations: [update, read, create]
-        }
+        { allow: owner, ownerField: "driver", operations: [update, read] }
+        { allow: owner, ownerField: "customerID", operations: [create, read] }
       ]
     )
-  driver: String @auth(rules: [{ allow: private, provider: iam }])
+  driver: String
+    @auth(
+      rules: [
+        { allow: private, provider: iam }
+        { allow: owner, ownerField: "driver", operations: [read] }
+      ]
+    )
   address: Address
 }
 

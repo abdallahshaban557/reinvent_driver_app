@@ -58,15 +58,13 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                     ElevatedButton(
                       child: const Text("Create Order"),
                       onPressed: () async {
-                        // final order = Order(ordertotal: 10.0, id: 'testing');
-                        // final request = ModelMutations.create(order);
-                        // final response =
-                        //     await Amplify.API.mutate(request: request).response;
-                        double id = 1.11312;
+                        double orderTotal = 2.1111;
                         String graphQLDocumentString = '''
                           mutation MyMutation {
-                          createOrder(input: {ordertotal: $id, orderstatus: NEW}) {
+                          createOrder(input: {ordertotal: $orderTotal}) {
                             id
+                            ordertotal
+                            orderstatus
                           }
                         }
                         ''';
@@ -83,7 +81,7 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
                         safePrint(createdOrder.toString());
 
                         if (createdOrder == null) {
-                          safePrint('errors: error');
+                          safePrint('errors: ${response.errors}');
                           return;
                         } else {}
                       },
@@ -106,49 +104,60 @@ class HistoryViewWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final getOrders = ref.watch(getListOfOrdersProvider);
-
-    return ListView.separated(
-      itemCount: getOrders.value?.length ?? 0,
-      separatorBuilder: (BuildContext context, int index) => const Divider(
-        thickness: 1,
-        color: Colors.black,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        safePrint(getOrders.value![index]!.customerID);
-        final df = DateFormat('dd-MM-yyyy a');
-        TemporalDateTime? myvalue = getOrders.value![index]!.createdAt;
-        //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
-        return ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
+    return getOrders.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Text('Error: $error'),
+      data: (data) {
+        safePrint(data.length);
+        return ListView.separated(
+          itemCount: data.length,
+          separatorBuilder: (BuildContext context, int index) => const Divider(
+            thickness: 1,
+            color: Colors.black,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            final DateFormat formatter = DateFormat('yyyy-MM-dd');
+            //get dateTime from temporalDate
+            final String formatted = formatter
+                .format(DateTime.parse(data[index]!.createdAt.toString()));
+            //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
+            return ListTile(
+              title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(getOrders.value![index]!.orderstatus.toString(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(data[index]!.orderstatus.toString(),
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .fontSize)),
+                      Text('order # ${data[index]!.id.split('-')[0]}',
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .fontSize)),
+                    ],
+                  ),
+                  Text('${data[index]?.ordertotal}',
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
                               .titleMedium!
                               .fontSize)),
-                  Text('order # ${getOrders.value![index]!.id.split('-')[0]}',
+                  Text(formatted,
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
-                              .titleSmall!
+                              .titleMedium!
                               .fontSize)),
                 ],
               ),
-              Text('${getOrders.value![index]?.ordertotal}',
-                  style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleMedium!.fontSize)),
-              Text('Date ${getOrders.value![index]!.createdAt!}',
-                  style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleMedium!.fontSize)),
-            ],
-          ),
+            );
+          },
         );
       },
     );

@@ -37,7 +37,7 @@ export 'Restaurant.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "6d7c289097a0948ebd7b0f0d686fc34e";
+  String version = "3ca431e65c51abe2409fcb72349de13d";
   @override
   List<ModelSchema> modelSchemas = [Address.schema, Customer.schema, MenuItem.schema, Order.schema, OrderItem.schema, Restaurant.schema];
   static final ModelProvider _instance = ModelProvider();

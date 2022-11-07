@@ -30,6 +30,7 @@ import 'package:flutter/foundation.dart';
 class Order extends Model {
   static const classType = const _OrderModelType();
   final String id;
+  final String? _orderID;
   final String? _customerID;
   final Customer? _customer;
   final Restaurant? _restaurant;
@@ -46,6 +47,10 @@ class Order extends Model {
   @override
   String getId() {
     return id;
+  }
+  
+  String? get orderID {
+    return _orderID;
   }
   
   String? get customerID {
@@ -84,11 +89,12 @@ class Order extends Model {
     return _updatedAt;
   }
   
-  const Order._internal({required this.id, customerID, customer, restaurant, orderitems, ordertotal, orderstatus, driver, createdAt, updatedAt}): _customerID = customerID, _customer = customer, _restaurant = restaurant, _orderitems = orderitems, _ordertotal = ordertotal, _orderstatus = orderstatus, _driver = driver, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Order._internal({required this.id, orderID, customerID, customer, restaurant, orderitems, ordertotal, orderstatus, driver, createdAt, updatedAt}): _orderID = orderID, _customerID = customerID, _customer = customer, _restaurant = restaurant, _orderitems = orderitems, _ordertotal = ordertotal, _orderstatus = orderstatus, _driver = driver, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Order({String? id, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
+  factory Order({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
     return Order._internal(
       id: id == null ? UUID.getUUID() : id,
+      orderID: orderID,
       customerID: customerID,
       customer: customer,
       restaurant: restaurant,
@@ -107,6 +113,7 @@ class Order extends Model {
     if (identical(other, this)) return true;
     return other is Order &&
       id == other.id &&
+      _orderID == other._orderID &&
       _customerID == other._customerID &&
       _customer == other._customer &&
       _restaurant == other._restaurant &&
@@ -125,6 +132,7 @@ class Order extends Model {
     
     buffer.write("Order {");
     buffer.write("id=" + "$id" + ", ");
+    buffer.write("orderID=" + "$_orderID" + ", ");
     buffer.write("customerID=" + "$_customerID" + ", ");
     buffer.write("customer=" + (_customer != null ? _customer!.toString() : "null") + ", ");
     buffer.write("restaurant=" + (_restaurant != null ? _restaurant!.toString() : "null") + ", ");
@@ -138,9 +146,10 @@ class Order extends Model {
     return buffer.toString();
   }
   
-  Order copyWith({String? id, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
+  Order copyWith({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
     return Order._internal(
       id: id ?? this.id,
+      orderID: orderID ?? this.orderID,
       customerID: customerID ?? this.customerID,
       customer: customer ?? this.customer,
       restaurant: restaurant ?? this.restaurant,
@@ -152,6 +161,7 @@ class Order extends Model {
   
   Order.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
+      _orderID = json['orderID'],
       _customerID = json['customerID'],
       _customer = json['customer']?['serializedData'] != null
         ? Customer.fromJson(new Map<String, dynamic>.from(json['customer']['serializedData']))
@@ -172,14 +182,15 @@ class Order extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'customerID': _customerID, 'customer': _customer?.toJson(), 'restaurant': _restaurant?.toJson(), 'orderitems': _orderitems?.map((OrderItem? e) => e?.toJson()).toList(), 'ordertotal': _ordertotal, 'orderstatus': enumToString(_orderstatus), 'driver': _driver, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer?.toJson(), 'restaurant': _restaurant?.toJson(), 'orderitems': _orderitems?.map((OrderItem? e) => e?.toJson()).toList(), 'ordertotal': _ordertotal, 'orderstatus': enumToString(_orderstatus), 'driver': _driver, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'customerID': _customerID, 'customer': _customer, 'restaurant': _restaurant, 'orderitems': _orderitems, 'ordertotal': _ordertotal, 'orderstatus': _orderstatus, 'driver': _driver, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer, 'restaurant': _restaurant, 'orderitems': _orderitems, 'ordertotal': _ordertotal, 'orderstatus': _orderstatus, 'driver': _driver, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
+  static final QueryField ORDERID = QueryField(fieldName: "orderID");
   static final QueryField CUSTOMERID = QueryField(fieldName: "customerID");
   static final QueryField CUSTOMER = QueryField(
     fieldName: "customer",
@@ -219,6 +230,12 @@ class Order extends Model {
     ];
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Order.ORDERID,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Order.CUSTOMERID,

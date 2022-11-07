@@ -35,7 +35,7 @@ class DriverScreen extends StatelessWidget {
         ),
         builder: Authenticator.builder(),
         home: isAmplifySuccessfullyConfigured
-            ? const Scaffold(body: SafeArea(child: MainDriverScreen()))
+            ? const Scaffold(body: MainDriverScreen())
             : const Scaffold(
                 body: Center(
                   child: Text(

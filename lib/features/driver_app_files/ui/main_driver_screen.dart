@@ -22,75 +22,77 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Driver App'),
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.delivery_dining)),
-                Tab(icon: Icon(Icons.wallet)),
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Driver App'),
+              bottom: const TabBar(
+                tabs: [
+                  Tab(icon: Icon(Icons.delivery_dining)),
+                  Tab(icon: Icon(Icons.wallet)),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: const Text("Open Popup"),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return OrderPopup();
+                              });
+                        },
+                      ),
+                      const SignOutButton(),
+                      ElevatedButton(
+                          onPressed: () async {
+                            //print current authenticated user
+                            print(await Amplify.Auth.getCurrentUser());
+                          },
+                          child: const Text('print user')),
+                      ElevatedButton(
+                        child: const Text("Create Order"),
+                        onPressed: () async {
+                          double orderTotal = 2.1111;
+                          String graphQLDocumentString = '''
+                            mutation MyMutation {
+                            createOrder(input: {ordertotal: $orderTotal}) {
+                              id
+                              ordertotal
+                              orderstatus
+                            }
+                          }
+                          ''';
+                          final operation = Amplify.API.mutate<Order>(
+                            request: GraphQLRequest(
+                              document: graphQLDocumentString,
+                              apiName: 'reinventapp',
+                              decodePath: 'createOrder',
+                              modelType: Order.classType,
+                            ),
+                          );
+                          final response = await operation.response;
+                          final createdOrder = response.data;
+                          safePrint(createdOrder.toString());
+
+                          if (createdOrder == null) {
+                            safePrint('errors: ${response.errors}');
+                            return;
+                          } else {}
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                HistoryViewWidget()
               ],
             ),
-          ),
-          body: TabBarView(
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      child: const Text("Open Popup"),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return OrderPopup();
-                            });
-                      },
-                    ),
-                    const SignOutButton(),
-                    ElevatedButton(
-                        onPressed: () async {
-                          //print current authenticated user
-                          print(await Amplify.Auth.getCurrentUser());
-                        },
-                        child: const Text('print user')),
-                    ElevatedButton(
-                      child: const Text("Create Order"),
-                      onPressed: () async {
-                        double orderTotal = 2.1111;
-                        String graphQLDocumentString = '''
-                          mutation MyMutation {
-                          createOrder(input: {ordertotal: $orderTotal}) {
-                            id
-                            ordertotal
-                            orderstatus
-                          }
-                        }
-                        ''';
-                        final operation = Amplify.API.mutate<Order>(
-                          request: GraphQLRequest(
-                            document: graphQLDocumentString,
-                            apiName: 'reinventapp',
-                            decodePath: 'createOrder',
-                            modelType: Order.classType,
-                          ),
-                        );
-                        final response = await operation.response;
-                        final createdOrder = response.data;
-                        safePrint(createdOrder.toString());
-
-                        if (createdOrder == null) {
-                          safePrint('errors: ${response.errors}');
-                          return;
-                        } else {}
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              HistoryViewWidget()
-            ],
           ),
         ));
   }
@@ -128,7 +130,7 @@ class HistoryViewWidget extends ConsumerWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(data[index]!.orderstatus.toString(),
+                      Text(data[index]!.orderstatus.toString().split('.')[1],
                           style: TextStyle(
                               fontSize: Theme.of(context)
                                   .textTheme

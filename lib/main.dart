@@ -17,7 +17,8 @@ Future<List<Order?>> getListOfOrders(GetListOfOrdersRef ref) async {
   try {
     final userDetails = await Amplify.Auth.getCurrentUser();
     final username = userDetails.username;
-    final predicate = Order.DRIVER.eq(username);
+    final predicate =
+        Order.DRIVER.eq(username).and(Order.ORDERSTATUS.eq('COMPLETED'));
     final request = ModelQueries.list(Order.classType, where: predicate);
     //final request = ModelQueries.list(Order.classType);
     final response = await Amplify.API.query(request: request).response;

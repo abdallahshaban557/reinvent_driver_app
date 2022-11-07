@@ -22,18 +22,18 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 2,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Driver App'),
-              bottom: const TabBar(
-                tabs: [
-                  Tab(icon: Icon(Icons.delivery_dining)),
-                  Tab(icon: Icon(Icons.wallet)),
-                ],
-              ),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Driver App'),
+            bottom: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.delivery_dining)),
+                Tab(icon: Icon(Icons.wallet)),
+              ],
             ),
-            body: TabBarView(
+          ),
+          body: SafeArea(
+            child: TabBarView(
               children: [
                 Center(
                   child: Column(

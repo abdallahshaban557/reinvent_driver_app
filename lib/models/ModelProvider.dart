@@ -27,6 +27,7 @@ import 'Order.dart';
 import 'OrderItem.dart';
 import 'Restaurant.dart';
 import 'OrderAddress.dart';
+import 'OrderMenuItem.dart';
 
 export 'Customer.dart';
 export 'CustomerAddress.dart';
@@ -34,17 +35,18 @@ export 'MenuItem.dart';
 export 'Order.dart';
 export 'OrderAddress.dart';
 export 'OrderItem.dart';
+export 'OrderMenuItem.dart';
 export 'OrderStatus.dart';
 export 'Restaurant.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "53252e6bd32d39a2498e37266abec793";
+  String version = "c557368e381b8f72658bb000a888adf6";
   @override
   List<ModelSchema> modelSchemas = [Customer.schema, CustomerAddress.schema, MenuItem.schema, Order.schema, OrderItem.schema, Restaurant.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
-  List<ModelSchema> customTypeSchemas = [OrderAddress.schema];
+  List<ModelSchema> customTypeSchemas = [OrderAddress.schema, OrderMenuItem.schema];
 
   static ModelProvider get instance => _instance;
   

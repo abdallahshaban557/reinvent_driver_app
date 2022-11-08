@@ -38,6 +38,8 @@ class Order extends Model {
   final double? _ordertotal;
   final OrderStatus? _orderstatus;
   final String? _driver;
+  final OrderAddress? _orderaddress;
+  final List<OrderMenuItem>? _ordereditems;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -81,6 +83,14 @@ class Order extends Model {
     return _driver;
   }
   
+  OrderAddress? get orderaddress {
+    return _orderaddress;
+  }
+  
+  List<OrderMenuItem>? get ordereditems {
+    return _ordereditems;
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -89,9 +99,9 @@ class Order extends Model {
     return _updatedAt;
   }
   
-  const Order._internal({required this.id, orderID, customerID, customer, restaurant, orderitems, ordertotal, orderstatus, driver, createdAt, updatedAt}): _orderID = orderID, _customerID = customerID, _customer = customer, _restaurant = restaurant, _orderitems = orderitems, _ordertotal = ordertotal, _orderstatus = orderstatus, _driver = driver, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Order._internal({required this.id, orderID, customerID, customer, restaurant, orderitems, ordertotal, orderstatus, driver, orderaddress, ordereditems, createdAt, updatedAt}): _orderID = orderID, _customerID = customerID, _customer = customer, _restaurant = restaurant, _orderitems = orderitems, _ordertotal = ordertotal, _orderstatus = orderstatus, _driver = driver, _orderaddress = orderaddress, _ordereditems = ordereditems, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Order({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
+  factory Order({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver, OrderAddress? orderaddress, List<OrderMenuItem>? ordereditems}) {
     return Order._internal(
       id: id == null ? UUID.getUUID() : id,
       orderID: orderID,
@@ -101,7 +111,9 @@ class Order extends Model {
       orderitems: orderitems != null ? List<OrderItem>.unmodifiable(orderitems) : orderitems,
       ordertotal: ordertotal,
       orderstatus: orderstatus,
-      driver: driver);
+      driver: driver,
+      orderaddress: orderaddress,
+      ordereditems: ordereditems != null ? List<OrderMenuItem>.unmodifiable(ordereditems) : ordereditems);
   }
   
   bool equals(Object other) {
@@ -120,7 +132,9 @@ class Order extends Model {
       DeepCollectionEquality().equals(_orderitems, other._orderitems) &&
       _ordertotal == other._ordertotal &&
       _orderstatus == other._orderstatus &&
-      _driver == other._driver;
+      _driver == other._driver &&
+      _orderaddress == other._orderaddress &&
+      DeepCollectionEquality().equals(_ordereditems, other._ordereditems);
   }
   
   @override
@@ -139,6 +153,8 @@ class Order extends Model {
     buffer.write("ordertotal=" + (_ordertotal != null ? _ordertotal!.toString() : "null") + ", ");
     buffer.write("orderstatus=" + (_orderstatus != null ? enumToString(_orderstatus)! : "null") + ", ");
     buffer.write("driver=" + "$_driver" + ", ");
+    buffer.write("orderaddress=" + (_orderaddress != null ? _orderaddress!.toString() : "null") + ", ");
+    buffer.write("ordereditems=" + (_ordereditems != null ? _ordereditems!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -146,7 +162,7 @@ class Order extends Model {
     return buffer.toString();
   }
   
-  Order copyWith({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver}) {
+  Order copyWith({String? id, String? orderID, String? customerID, Customer? customer, Restaurant? restaurant, List<OrderItem>? orderitems, double? ordertotal, OrderStatus? orderstatus, String? driver, OrderAddress? orderaddress, List<OrderMenuItem>? ordereditems}) {
     return Order._internal(
       id: id ?? this.id,
       orderID: orderID ?? this.orderID,
@@ -156,7 +172,9 @@ class Order extends Model {
       orderitems: orderitems ?? this.orderitems,
       ordertotal: ordertotal ?? this.ordertotal,
       orderstatus: orderstatus ?? this.orderstatus,
-      driver: driver ?? this.driver);
+      driver: driver ?? this.driver,
+      orderaddress: orderaddress ?? this.orderaddress,
+      ordereditems: ordereditems ?? this.ordereditems);
   }
   
   Order.fromJson(Map<String, dynamic> json)  
@@ -178,15 +196,24 @@ class Order extends Model {
       _ordertotal = (json['ordertotal'] as num?)?.toDouble(),
       _orderstatus = enumFromString<OrderStatus>(json['orderstatus'], OrderStatus.values),
       _driver = json['driver'],
+      _orderaddress = json['orderaddress']?['serializedData'] != null
+        ? OrderAddress.fromJson(new Map<String, dynamic>.from(json['orderaddress']['serializedData']))
+        : null,
+      _ordereditems = json['ordereditems'] is List
+        ? (json['ordereditems'] as List)
+          .where((e) => e != null)
+          .map((e) => OrderMenuItem.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer?.toJson(), 'restaurant': _restaurant?.toJson(), 'orderitems': _orderitems?.map((OrderItem? e) => e?.toJson()).toList(), 'ordertotal': _ordertotal, 'orderstatus': enumToString(_orderstatus), 'driver': _driver, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer?.toJson(), 'restaurant': _restaurant?.toJson(), 'orderitems': _orderitems?.map((OrderItem? e) => e?.toJson()).toList(), 'ordertotal': _ordertotal, 'orderstatus': enumToString(_orderstatus), 'driver': _driver, 'orderaddress': _orderaddress?.toJson(), 'ordereditems': _ordereditems?.map((OrderMenuItem? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer, 'restaurant': _restaurant, 'orderitems': _orderitems, 'ordertotal': _ordertotal, 'orderstatus': _orderstatus, 'driver': _driver, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'orderID': _orderID, 'customerID': _customerID, 'customer': _customer, 'restaurant': _restaurant, 'orderitems': _orderitems, 'ordertotal': _ordertotal, 'orderstatus': _orderstatus, 'driver': _driver, 'orderaddress': _orderaddress, 'ordereditems': _ordereditems, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
@@ -204,6 +231,8 @@ class Order extends Model {
   static final QueryField ORDERTOTAL = QueryField(fieldName: "ordertotal");
   static final QueryField ORDERSTATUS = QueryField(fieldName: "orderstatus");
   static final QueryField DRIVER = QueryField(fieldName: "driver");
+  static final QueryField ORDERADDRESS = QueryField(fieldName: "orderaddress");
+  static final QueryField ORDEREDITEMS = QueryField(fieldName: "ordereditems");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Order";
     modelSchemaDefinition.pluralName = "Orders";
@@ -280,6 +309,19 @@ class Order extends Model {
       key: Order.DRIVER,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'orderaddress',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'OrderAddress')
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'ordereditems',
+      isRequired: false,
+      isArray: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'OrderMenuItem')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(

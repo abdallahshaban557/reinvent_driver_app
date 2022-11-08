@@ -33,6 +33,7 @@ class OrderItem extends Model {
   final int? _quantity;
   final String? _customerID;
   final List<MenuItem>? _menuitems;
+  final List<OrderMenuItem>? _ordermenuitems;
   final Order? _order;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -57,6 +58,10 @@ class OrderItem extends Model {
     return _menuitems;
   }
   
+  List<OrderMenuItem>? get ordermenuitems {
+    return _ordermenuitems;
+  }
+  
   Order? get order {
     return _order;
   }
@@ -69,14 +74,15 @@ class OrderItem extends Model {
     return _updatedAt;
   }
   
-  const OrderItem._internal({required this.id, quantity, customerID, menuitems, order, createdAt, updatedAt}): _quantity = quantity, _customerID = customerID, _menuitems = menuitems, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
+  const OrderItem._internal({required this.id, quantity, customerID, menuitems, ordermenuitems, order, createdAt, updatedAt}): _quantity = quantity, _customerID = customerID, _menuitems = menuitems, _ordermenuitems = ordermenuitems, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory OrderItem({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, Order? order}) {
+  factory OrderItem({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, List<OrderMenuItem>? ordermenuitems, Order? order}) {
     return OrderItem._internal(
       id: id == null ? UUID.getUUID() : id,
       quantity: quantity,
       customerID: customerID,
       menuitems: menuitems != null ? List<MenuItem>.unmodifiable(menuitems) : menuitems,
+      ordermenuitems: ordermenuitems != null ? List<OrderMenuItem>.unmodifiable(ordermenuitems) : ordermenuitems,
       order: order);
   }
   
@@ -92,6 +98,7 @@ class OrderItem extends Model {
       _quantity == other._quantity &&
       _customerID == other._customerID &&
       DeepCollectionEquality().equals(_menuitems, other._menuitems) &&
+      DeepCollectionEquality().equals(_ordermenuitems, other._ordermenuitems) &&
       _order == other._order;
   }
   
@@ -106,6 +113,7 @@ class OrderItem extends Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("quantity=" + (_quantity != null ? _quantity!.toString() : "null") + ", ");
     buffer.write("customerID=" + "$_customerID" + ", ");
+    buffer.write("ordermenuitems=" + (_ordermenuitems != null ? _ordermenuitems!.toString() : "null") + ", ");
     buffer.write("order=" + (_order != null ? _order!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -114,12 +122,13 @@ class OrderItem extends Model {
     return buffer.toString();
   }
   
-  OrderItem copyWith({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, Order? order}) {
+  OrderItem copyWith({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, List<OrderMenuItem>? ordermenuitems, Order? order}) {
     return OrderItem._internal(
       id: id ?? this.id,
       quantity: quantity ?? this.quantity,
       customerID: customerID ?? this.customerID,
       menuitems: menuitems ?? this.menuitems,
+      ordermenuitems: ordermenuitems ?? this.ordermenuitems,
       order: order ?? this.order);
   }
   
@@ -133,6 +142,12 @@ class OrderItem extends Model {
           .map((e) => MenuItem.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
+      _ordermenuitems = json['ordermenuitems'] is List
+        ? (json['ordermenuitems'] as List)
+          .where((e) => e != null)
+          .map((e) => OrderMenuItem.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _order = json['order']?['serializedData'] != null
         ? Order.fromJson(new Map<String, dynamic>.from(json['order']['serializedData']))
         : null,
@@ -140,11 +155,11 @@ class OrderItem extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems?.map((MenuItem? e) => e?.toJson()).toList(), 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems?.map((MenuItem? e) => e?.toJson()).toList(), 'ordermenuitems': _ordermenuitems?.map((OrderMenuItem? e) => e?.toJson()).toList(), 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems, 'ordermenuitems': _ordermenuitems, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
@@ -153,6 +168,7 @@ class OrderItem extends Model {
   static final QueryField MENUITEMS = QueryField(
     fieldName: "menuitems",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (MenuItem).toString()));
+  static final QueryField ORDERMENUITEMS = QueryField(fieldName: "ordermenuitems");
   static final QueryField ORDER = QueryField(
     fieldName: "order",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Order).toString()));
@@ -190,6 +206,13 @@ class OrderItem extends Model {
       isRequired: false,
       ofModelName: (MenuItem).toString(),
       associatedKey: MenuItem.ORDERITEMMENUITEMSID
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+      fieldName: 'ordermenuitems',
+      isRequired: false,
+      isArray: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'OrderMenuItem')
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(

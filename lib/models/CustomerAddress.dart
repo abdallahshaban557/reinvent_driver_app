@@ -260,7 +260,7 @@ class CustomerAddress extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
       key: CustomerAddress.CUSTOMER,
       isRequired: false,
-      targetName: "customerCustomerAddressId",
+      targetName: "customerCustomeraddressId",
       ofModelName: (Customer).toString()
     ));
     

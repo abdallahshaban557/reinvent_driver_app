@@ -34,7 +34,7 @@ class Customer extends Model {
   final String? _lastName;
   final String? _email;
   final List<Order>? _orders;
-  final List<CustomerAddress>? _CustomerAddress;
+  final List<CustomerAddress>? _customeraddress;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -89,8 +89,8 @@ class Customer extends Model {
     return _orders;
   }
   
-  List<CustomerAddress>? get CustomerAddress {
-    return _CustomerAddress;
+  List<CustomerAddress>? get customeraddress {
+    return _customeraddress;
   }
   
   TemporalDateTime? get createdAt {
@@ -101,16 +101,16 @@ class Customer extends Model {
     return _updatedAt;
   }
   
-  const Customer._internal({required this.id, required firstName, required lastName, required email, orders, CustomerAddress, createdAt, updatedAt}): _firstName = firstName, _lastName = lastName, _email = email, _orders = orders, _CustomerAddress = CustomerAddress, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Customer._internal({required this.id, required firstName, required lastName, required email, orders, customeraddress, createdAt, updatedAt}): _firstName = firstName, _lastName = lastName, _email = email, _orders = orders, _customeraddress = customeraddress, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Customer({String? id, required String firstName, required String lastName, required String email, List<Order>? orders, List<CustomerAddress>? CustomerAddress}) {
+  factory Customer({String? id, required String firstName, required String lastName, required String email, List<Order>? orders, List<CustomerAddress>? customeraddress}) {
     return Customer._internal(
       id: id == null ? UUID.getUUID() : id,
       firstName: firstName,
       lastName: lastName,
       email: email,
       orders: orders != null ? List<Order>.unmodifiable(orders) : orders,
-      CustomerAddress: CustomerAddress != null ? List<CustomerAddress>.unmodifiable(CustomerAddress) : CustomerAddress);
+      customeraddress: customeraddress != null ? List<CustomerAddress>.unmodifiable(customeraddress) : customeraddress);
   }
   
   bool equals(Object other) {
@@ -126,7 +126,7 @@ class Customer extends Model {
       _lastName == other._lastName &&
       _email == other._email &&
       DeepCollectionEquality().equals(_orders, other._orders) &&
-      DeepCollectionEquality().equals(_CustomerAddress, other._CustomerAddress);
+      DeepCollectionEquality().equals(_customeraddress, other._customeraddress);
   }
   
   @override
@@ -148,14 +148,14 @@ class Customer extends Model {
     return buffer.toString();
   }
   
-  Customer copyWith({String? id, String? firstName, String? lastName, String? email, List<Order>? orders, List<CustomerAddress>? CustomerAddress}) {
+  Customer copyWith({String? id, String? firstName, String? lastName, String? email, List<Order>? orders, List<CustomerAddress>? customeraddress}) {
     return Customer._internal(
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       orders: orders ?? this.orders,
-      CustomerAddress: CustomerAddress ?? this.CustomerAddress);
+      customeraddress: customeraddress ?? this.customeraddress);
   }
   
   Customer.fromJson(Map<String, dynamic> json)  
@@ -169,8 +169,8 @@ class Customer extends Model {
           .map((e) => Order.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _CustomerAddress = json['CustomerAddress'] is List
-        ? (json['CustomerAddress'] as List)
+      _customeraddress = json['customeraddress'] is List
+        ? (json['customeraddress'] as List)
           .where((e) => e?['serializedData'] != null)
           .map((e) => CustomerAddress.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
@@ -179,11 +179,11 @@ class Customer extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders?.map((Order? e) => e?.toJson()).toList(), 'CustomerAddress': _CustomerAddress?.map((CustomerAddress? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders?.map((Order? e) => e?.toJson()).toList(), 'customeraddress': _customeraddress?.map((CustomerAddress? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders, 'CustomerAddress': _CustomerAddress, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders, 'customeraddress': _customeraddress, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
@@ -194,7 +194,7 @@ class Customer extends Model {
     fieldName: "orders",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Order).toString()));
   static final QueryField CUSTOMERADDRESS = QueryField(
-    fieldName: "CustomerAddress",
+    fieldName: "customeraddress",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (CustomerAddress).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Customer";

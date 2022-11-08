@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -31,6 +32,7 @@ class OrderItem extends Model {
   final String id;
   final int? _quantity;
   final String? _customerID;
+  final List<MenuItem>? _menuitems;
   final Order? _order;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -51,6 +53,10 @@ class OrderItem extends Model {
     return _customerID;
   }
   
+  List<MenuItem>? get menuitems {
+    return _menuitems;
+  }
+  
   Order? get order {
     return _order;
   }
@@ -63,13 +69,14 @@ class OrderItem extends Model {
     return _updatedAt;
   }
   
-  const OrderItem._internal({required this.id, quantity, customerID, order, createdAt, updatedAt}): _quantity = quantity, _customerID = customerID, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
+  const OrderItem._internal({required this.id, quantity, customerID, menuitems, order, createdAt, updatedAt}): _quantity = quantity, _customerID = customerID, _menuitems = menuitems, _order = order, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory OrderItem({String? id, int? quantity, String? customerID, Order? order}) {
+  factory OrderItem({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, Order? order}) {
     return OrderItem._internal(
       id: id == null ? UUID.getUUID() : id,
       quantity: quantity,
       customerID: customerID,
+      menuitems: menuitems != null ? List<MenuItem>.unmodifiable(menuitems) : menuitems,
       order: order);
   }
   
@@ -84,6 +91,7 @@ class OrderItem extends Model {
       id == other.id &&
       _quantity == other._quantity &&
       _customerID == other._customerID &&
+      DeepCollectionEquality().equals(_menuitems, other._menuitems) &&
       _order == other._order;
   }
   
@@ -106,11 +114,12 @@ class OrderItem extends Model {
     return buffer.toString();
   }
   
-  OrderItem copyWith({String? id, int? quantity, String? customerID, Order? order}) {
+  OrderItem copyWith({String? id, int? quantity, String? customerID, List<MenuItem>? menuitems, Order? order}) {
     return OrderItem._internal(
       id: id ?? this.id,
       quantity: quantity ?? this.quantity,
       customerID: customerID ?? this.customerID,
+      menuitems: menuitems ?? this.menuitems,
       order: order ?? this.order);
   }
   
@@ -118,6 +127,12 @@ class OrderItem extends Model {
     : id = json['id'],
       _quantity = (json['quantity'] as num?)?.toInt(),
       _customerID = json['customerID'],
+      _menuitems = json['menuitems'] is List
+        ? (json['menuitems'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => MenuItem.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _order = json['order']?['serializedData'] != null
         ? Order.fromJson(new Map<String, dynamic>.from(json['order']['serializedData']))
         : null,
@@ -125,16 +140,19 @@ class OrderItem extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems?.map((MenuItem? e) => e?.toJson()).toList(), 'order': _order?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'quantity': _quantity, 'customerID': _customerID, 'menuitems': _menuitems, 'order': _order, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField QUANTITY = QueryField(fieldName: "quantity");
   static final QueryField CUSTOMERID = QueryField(fieldName: "customerID");
+  static final QueryField MENUITEMS = QueryField(
+    fieldName: "menuitems",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (MenuItem).toString()));
   static final QueryField ORDER = QueryField(
     fieldName: "order",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Order).toString()));
@@ -165,6 +183,13 @@ class OrderItem extends Model {
       key: OrderItem.CUSTOMERID,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: OrderItem.MENUITEMS,
+      isRequired: false,
+      ofModelName: (MenuItem).toString(),
+      associatedKey: MenuItem.ORDERITEMMENUITEMSID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(

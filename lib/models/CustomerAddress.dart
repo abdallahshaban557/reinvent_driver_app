@@ -21,20 +21,20 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
-/** This is an auto generated class representing the Customer type in your schema. */
+/** This is an auto generated class representing the CustomerAddress type in your schema. */
 @immutable
-class Customer extends Model {
-  static const classType = const _CustomerModelType();
+class CustomerAddress extends Model {
+  static const classType = const _CustomerAddressModelType();
   final String id;
-  final String? _firstName;
-  final String? _lastName;
-  final String? _email;
-  final List<Order>? _orders;
-  final List<CustomerAddress>? _CustomerAddress;
+  final String? _street;
+  final String? _city;
+  final String? _state;
+  final String? _zip;
+  final String? _owner;
+  final Customer? _customer;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -46,9 +46,9 @@ class Customer extends Model {
     return id;
   }
   
-  String get firstName {
+  String get street {
     try {
-      return _firstName!;
+      return _street!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -59,9 +59,9 @@ class Customer extends Model {
     }
   }
   
-  String get lastName {
+  String get city {
     try {
-      return _lastName!;
+      return _city!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -72,9 +72,9 @@ class Customer extends Model {
     }
   }
   
-  String get email {
+  String get state {
     try {
-      return _email!;
+      return _state!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -85,12 +85,25 @@ class Customer extends Model {
     }
   }
   
-  List<Order>? get orders {
-    return _orders;
+  String get zip {
+    try {
+      return _zip!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  List<CustomerAddress>? get CustomerAddress {
-    return _CustomerAddress;
+  String? get owner {
+    return _owner;
+  }
+  
+  Customer? get customer {
+    return _customer;
   }
   
   TemporalDateTime? get createdAt {
@@ -101,16 +114,17 @@ class Customer extends Model {
     return _updatedAt;
   }
   
-  const Customer._internal({required this.id, required firstName, required lastName, required email, orders, CustomerAddress, createdAt, updatedAt}): _firstName = firstName, _lastName = lastName, _email = email, _orders = orders, _CustomerAddress = CustomerAddress, _createdAt = createdAt, _updatedAt = updatedAt;
+  const CustomerAddress._internal({required this.id, required street, required city, required state, required zip, owner, customer, createdAt, updatedAt}): _street = street, _city = city, _state = state, _zip = zip, _owner = owner, _customer = customer, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Customer({String? id, required String firstName, required String lastName, required String email, List<Order>? orders, List<CustomerAddress>? CustomerAddress}) {
-    return Customer._internal(
+  factory CustomerAddress({String? id, required String street, required String city, required String state, required String zip, String? owner, Customer? customer}) {
+    return CustomerAddress._internal(
       id: id == null ? UUID.getUUID() : id,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      orders: orders != null ? List<Order>.unmodifiable(orders) : orders,
-      CustomerAddress: CustomerAddress != null ? List<CustomerAddress>.unmodifiable(CustomerAddress) : CustomerAddress);
+      street: street,
+      city: city,
+      state: state,
+      zip: zip,
+      owner: owner,
+      customer: customer);
   }
   
   bool equals(Object other) {
@@ -120,13 +134,14 @@ class Customer extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Customer &&
+    return other is CustomerAddress &&
       id == other.id &&
-      _firstName == other._firstName &&
-      _lastName == other._lastName &&
-      _email == other._email &&
-      DeepCollectionEquality().equals(_orders, other._orders) &&
-      DeepCollectionEquality().equals(_CustomerAddress, other._CustomerAddress);
+      _street == other._street &&
+      _city == other._city &&
+      _state == other._state &&
+      _zip == other._zip &&
+      _owner == other._owner &&
+      _customer == other._customer;
   }
   
   @override
@@ -136,11 +151,14 @@ class Customer extends Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Customer {");
+    buffer.write("CustomerAddress {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("firstName=" + "$_firstName" + ", ");
-    buffer.write("lastName=" + "$_lastName" + ", ");
-    buffer.write("email=" + "$_email" + ", ");
+    buffer.write("street=" + "$_street" + ", ");
+    buffer.write("city=" + "$_city" + ", ");
+    buffer.write("state=" + "$_state" + ", ");
+    buffer.write("zip=" + "$_zip" + ", ");
+    buffer.write("owner=" + "$_owner" + ", ");
+    buffer.write("customer=" + (_customer != null ? _customer!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -148,62 +166,55 @@ class Customer extends Model {
     return buffer.toString();
   }
   
-  Customer copyWith({String? id, String? firstName, String? lastName, String? email, List<Order>? orders, List<CustomerAddress>? CustomerAddress}) {
-    return Customer._internal(
+  CustomerAddress copyWith({String? id, String? street, String? city, String? state, String? zip, String? owner, Customer? customer}) {
+    return CustomerAddress._internal(
       id: id ?? this.id,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
-      orders: orders ?? this.orders,
-      CustomerAddress: CustomerAddress ?? this.CustomerAddress);
+      street: street ?? this.street,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      zip: zip ?? this.zip,
+      owner: owner ?? this.owner,
+      customer: customer ?? this.customer);
   }
   
-  Customer.fromJson(Map<String, dynamic> json)  
+  CustomerAddress.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _firstName = json['firstName'],
-      _lastName = json['lastName'],
-      _email = json['email'],
-      _orders = json['orders'] is List
-        ? (json['orders'] as List)
-          .where((e) => e?['serializedData'] != null)
-          .map((e) => Order.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
-        : null,
-      _CustomerAddress = json['CustomerAddress'] is List
-        ? (json['CustomerAddress'] as List)
-          .where((e) => e?['serializedData'] != null)
-          .map((e) => CustomerAddress.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
+      _street = json['street'],
+      _city = json['city'],
+      _state = json['state'],
+      _zip = json['zip'],
+      _owner = json['owner'],
+      _customer = json['customer']?['serializedData'] != null
+        ? Customer.fromJson(new Map<String, dynamic>.from(json['customer']['serializedData']))
         : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders?.map((Order? e) => e?.toJson()).toList(), 'CustomerAddress': _CustomerAddress?.map((CustomerAddress? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'street': _street, 'city': _city, 'state': _state, 'zip': _zip, 'owner': _owner, 'customer': _customer?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'firstName': _firstName, 'lastName': _lastName, 'email': _email, 'orders': _orders, 'CustomerAddress': _CustomerAddress, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'street': _street, 'city': _city, 'state': _state, 'zip': _zip, 'owner': _owner, 'customer': _customer, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField FIRSTNAME = QueryField(fieldName: "firstName");
-  static final QueryField LASTNAME = QueryField(fieldName: "lastName");
-  static final QueryField EMAIL = QueryField(fieldName: "email");
-  static final QueryField ORDERS = QueryField(
-    fieldName: "orders",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Order).toString()));
-  static final QueryField CUSTOMERADDRESS = QueryField(
-    fieldName: "CustomerAddress",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (CustomerAddress).toString()));
+  static final QueryField STREET = QueryField(fieldName: "street");
+  static final QueryField CITY = QueryField(fieldName: "city");
+  static final QueryField STATE = QueryField(fieldName: "state");
+  static final QueryField ZIP = QueryField(fieldName: "zip");
+  static final QueryField OWNER = QueryField(fieldName: "owner");
+  static final QueryField CUSTOMER = QueryField(
+    fieldName: "customer",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Customer).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Customer";
-    modelSchemaDefinition.pluralName = "Customers";
+    modelSchemaDefinition.name = "CustomerAddress";
+    modelSchemaDefinition.pluralName = "CustomerAddresses";
     
     modelSchemaDefinition.authRules = [
       AuthRule(
         authStrategy: AuthStrategy.OWNER,
-        ownerField: "id",
+        ownerField: "owner",
         identityClaim: "cognito:username",
         provider: AuthRuleProvider.USERPOOLS,
         operations: [
@@ -217,35 +228,40 @@ class Customer extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Customer.FIRSTNAME,
+      key: CustomerAddress.STREET,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Customer.LASTNAME,
+      key: CustomerAddress.CITY,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Customer.EMAIL,
+      key: CustomerAddress.STATE,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-      key: Customer.ORDERS,
-      isRequired: false,
-      ofModelName: (Order).toString(),
-      associatedKey: Order.CUSTOMER
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: CustomerAddress.ZIP,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-      key: Customer.CUSTOMERADDRESS,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: CustomerAddress.OWNER,
       isRequired: false,
-      ofModelName: (CustomerAddress).toString(),
-      associatedKey: CustomerAddress.CUSTOMER
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+      key: CustomerAddress.CUSTOMER,
+      isRequired: false,
+      targetName: "customerCustomerAddressId",
+      ofModelName: (Customer).toString()
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
@@ -264,11 +280,11 @@ class Customer extends Model {
   });
 }
 
-class _CustomerModelType extends ModelType<Customer> {
-  const _CustomerModelType();
+class _CustomerAddressModelType extends ModelType<CustomerAddress> {
+  const _CustomerAddressModelType();
   
   @override
-  Customer fromJson(Map<String, dynamic> jsonData) {
-    return Customer.fromJson(jsonData);
+  CustomerAddress fromJson(Map<String, dynamic> jsonData) {
+    return CustomerAddress.fromJson(jsonData);
   }
 }

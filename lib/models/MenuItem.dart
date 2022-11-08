@@ -35,6 +35,7 @@ class MenuItem extends Model {
   final Restaurant? _restaurant;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
+  final String? _orderItemMenuitemsId;
 
   @override
   getInstanceType() => classType;
@@ -86,15 +87,20 @@ class MenuItem extends Model {
     return _updatedAt;
   }
   
-  const MenuItem._internal({required this.id, required name, description, required price, restaurant, createdAt, updatedAt}): _name = name, _description = description, _price = price, _restaurant = restaurant, _createdAt = createdAt, _updatedAt = updatedAt;
+  String? get orderItemMenuitemsId {
+    return _orderItemMenuitemsId;
+  }
   
-  factory MenuItem({String? id, required String name, String? description, required double price, Restaurant? restaurant}) {
+  const MenuItem._internal({required this.id, required name, description, required price, restaurant, createdAt, updatedAt, orderItemMenuitemsId}): _name = name, _description = description, _price = price, _restaurant = restaurant, _createdAt = createdAt, _updatedAt = updatedAt, _orderItemMenuitemsId = orderItemMenuitemsId;
+  
+  factory MenuItem({String? id, required String name, String? description, required double price, Restaurant? restaurant, String? orderItemMenuitemsId}) {
     return MenuItem._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description,
       price: price,
-      restaurant: restaurant);
+      restaurant: restaurant,
+      orderItemMenuitemsId: orderItemMenuitemsId);
   }
   
   bool equals(Object other) {
@@ -109,7 +115,8 @@ class MenuItem extends Model {
       _name == other._name &&
       _description == other._description &&
       _price == other._price &&
-      _restaurant == other._restaurant;
+      _restaurant == other._restaurant &&
+      _orderItemMenuitemsId == other._orderItemMenuitemsId;
   }
   
   @override
@@ -126,19 +133,21 @@ class MenuItem extends Model {
     buffer.write("price=" + (_price != null ? _price!.toString() : "null") + ", ");
     buffer.write("restaurant=" + (_restaurant != null ? _restaurant!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null") + ", ");
+    buffer.write("orderItemMenuitemsId=" + "$_orderItemMenuitemsId");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  MenuItem copyWith({String? id, String? name, String? description, double? price, Restaurant? restaurant}) {
+  MenuItem copyWith({String? id, String? name, String? description, double? price, Restaurant? restaurant, String? orderItemMenuitemsId}) {
     return MenuItem._internal(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       price: price ?? this.price,
-      restaurant: restaurant ?? this.restaurant);
+      restaurant: restaurant ?? this.restaurant,
+      orderItemMenuitemsId: orderItemMenuitemsId ?? this.orderItemMenuitemsId);
   }
   
   MenuItem.fromJson(Map<String, dynamic> json)  
@@ -150,14 +159,15 @@ class MenuItem extends Model {
         ? Restaurant.fromJson(new Map<String, dynamic>.from(json['restaurant']['serializedData']))
         : null,
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null,
+      _orderItemMenuitemsId = json['orderItemMenuitemsId'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format(), 'orderItemMenuitemsId': _orderItemMenuitemsId
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'name': _name, 'description': _description, 'price': _price, 'restaurant': _restaurant, 'createdAt': _createdAt, 'updatedAt': _updatedAt, 'orderItemMenuitemsId': _orderItemMenuitemsId
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
@@ -167,6 +177,7 @@ class MenuItem extends Model {
   static final QueryField RESTAURANT = QueryField(
     fieldName: "restaurant",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Restaurant).toString()));
+  static final QueryField ORDERITEMMENUITEMSID = QueryField(fieldName: "orderItemMenuitemsId");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "MenuItem";
     modelSchemaDefinition.pluralName = "MenuItems";
@@ -229,6 +240,12 @@ class MenuItem extends Model {
       isRequired: false,
       isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: MenuItem.ORDERITEMMENUITEMSID,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

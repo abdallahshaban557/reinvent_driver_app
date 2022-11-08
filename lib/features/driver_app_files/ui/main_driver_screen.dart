@@ -135,6 +135,10 @@ class AssignedViewWidget extends ConsumerWidget {
                 .format(DateTime.parse(data[index]!.createdAt.toString()));
             //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
             return ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/orderDetails',
+                    arguments: data[index]);
+              },
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

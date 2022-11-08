@@ -72,7 +72,6 @@ type Order
         { allow: owner, ownerField: "driver", operations: [read] }
       ]
     )
-  address: Address
 }
 
 enum OrderStatus {
@@ -92,7 +91,7 @@ type OrderItem
   id: ID!
   quantity: Int
   customerID: String
-  menuitem: MenuItem
+  menuitems: [MenuItem] @hasMany
   order: Order @belongsTo
 }
 
@@ -105,10 +104,10 @@ type Customer @model @auth(rules: [{ allow: owner, ownerField: "id" }]) {
   lastName: String!
   email: String!
   orders: [Order] @hasMany
-  address: [Address] @hasMany
+  CustomerAddress: [CustomerAddress] @hasMany
 }
 
-type Address @model @auth(rules: [{ allow: owner }]) {
+type CustomerAddress @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   street: String!
   city: String!
@@ -116,4 +115,11 @@ type Address @model @auth(rules: [{ allow: owner }]) {
   zip: String!
   owner: String @auth(rules: [{ allow: owner, operations: [create, read] }])
   customer: Customer @belongsTo
+}
+
+type OrderAddress {
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
 }

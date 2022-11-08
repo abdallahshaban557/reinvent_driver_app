@@ -1,5 +1,6 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
+import 'package:reinvent_driver_app/OrderDetailsScreen.dart';
 import 'package:reinvent_driver_app/features/driver_app_files/ui/main_driver_screen.dart';
 
 class DriverScreen extends StatelessWidget {
@@ -33,6 +34,10 @@ class DriverScreen extends StatelessWidget {
             ),
           ),
         ),
+        initialRoute: '/',
+        routes: {
+          '/orderDetails': (context) => const OrderDetailsScreen(),
+        },
         builder: Authenticator.builder(),
         home: isAmplifySuccessfullyConfigured
             ? const Scaffold(body: MainDriverScreen())

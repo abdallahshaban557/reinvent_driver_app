@@ -72,6 +72,7 @@ type Order
         { allow: owner, ownerField: "driver", operations: [read] }
       ]
     )
+  orderaddress: OrderAddress
 }
 
 enum OrderStatus {

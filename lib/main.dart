@@ -1,7 +1,8 @@
 import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:reinvent_driver_app/driver-screen.dart';
-
+import 'OrderDetailsScreen.dart';
+import 'features/driver_app_files/ui/main_driver_screen.dart';
 import 'models/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -74,8 +75,43 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      child: DriverScreen(
-        isAmplifySuccessfullyConfigured: isAmplifySuccessfullyConfigured,
+      child: Authenticator(
+        child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            textTheme: const TextTheme(
+              titleLarge: TextStyle(fontSize: 20),
+              titleMedium: TextStyle(fontSize: 15),
+              titleSmall: TextStyle(fontSize: 10),
+              headlineMedium: TextStyle(
+                fontSize: 30.0,
+              ),
+              bodySmall: TextStyle(
+                fontSize: 36.0,
+                fontFamily: 'Hind',
+              ),
+              bodyLarge: TextStyle(
+                fontSize: 36.0,
+                fontFamily: 'Hind',
+              ),
+            ),
+          ),
+          initialRoute: '/',
+          routes: {
+            '/orderDetails': (context) => const OrderDetailsScreen(),
+          },
+          builder: Authenticator.builder(),
+          home: isAmplifySuccessfullyConfigured
+              ? const Scaffold(body: MainDriverScreen())
+              : const Scaffold(
+                  body: Center(
+                    child: Text(
+                      'Tried to reconfigure Amplify; '
+                      'this can occur when your app restarts on Android.',
+                    ),
+                  ),
+                ),
+        ),
       ),
     ),
   );

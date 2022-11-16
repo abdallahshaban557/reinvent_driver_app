@@ -45,6 +45,15 @@ type Order
       { allow: owner, ownerField: "driver", operations: [read] }
     ]
   ) {
+  id: ID!
+    @auth(
+      rules: [
+        # allow only customers to create/read/update orders
+        { allow: owner, ownerField: "customerID", operations: [read, update] }
+        { allow: owner, ownerField: "driver", operations: [read, update] }
+        { allow: private, provider: iam, operations: [read, update] }
+      ]
+    )
   orderID: ID
   customerID: String
     @auth(

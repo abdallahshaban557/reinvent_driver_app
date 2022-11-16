@@ -1,3 +1,4 @@
+import 'package:amplify_api/model_mutations.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -87,18 +88,28 @@ class OrderDetailsScreen extends StatelessWidget {
 
 //stateless widget button
 class OrderDetailsButton extends StatelessWidget {
-  const OrderDetailsButton({
+  OrderDetailsButton({
     super.key,
     required this.order,
   });
-  final Order order;
+  Order order;
+
+  Future<void> updateTodo() async {
+    if (order.orderstatus == OrderStatus.NEW) {
+      final Order updatedOrder =
+          order.copyWith(orderstatus: OrderStatus.ONROUTE);
+      final request = ModelMutations.update(updatedOrder);
+      final response = await Amplify.API.mutate(request: request).response;
+      safePrint('Response: $response');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     if (order.orderstatus == OrderStatus.NEW) {
       return ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/orderdetails', arguments: order);
+        onPressed: () async {
+          await updateTodo();
         },
         child: const Text('Accept Order'),
       );

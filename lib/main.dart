@@ -77,6 +77,7 @@ Future<void> main() async {
     ProviderScope(
       child: Authenticator(
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
             textTheme: const TextTheme(

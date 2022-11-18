@@ -87,7 +87,7 @@ class HistoryViewWidget extends ConsumerWidget {
                                   .fontSize)),
                     ],
                   ),
-                  Text('${data[index]?.ordertotal}',
+                  Text('\$ ${data[index]?.ordertotal}',
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
@@ -159,7 +159,7 @@ class AssignedViewWidget extends ConsumerWidget {
                                   .fontSize)),
                     ],
                   ),
-                  Text('${data[index]?.ordertotal}',
+                  Text('\$ ${data[index]?.ordertotal}',
                       style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
@@ -177,50 +177,6 @@ class AssignedViewWidget extends ConsumerWidget {
           },
         );
       },
-    );
-  }
-}
-
-class OrderPopup extends StatelessWidget {
-  const OrderPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      scrollable: true,
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'New order assigned to you',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                child: const Text(
-                  "Accept",
-                ),
-                onPressed: () {
-                  // your code
-                },
-              ),
-              ElevatedButton(
-                child: const Text(
-                  "Reject",
-                ),
-                onPressed: () {
-                  // your code
-                },
-              )
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

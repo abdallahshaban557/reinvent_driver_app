@@ -1,4 +1,4 @@
-import 'package:amplify_api/model_mutations.dart';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';

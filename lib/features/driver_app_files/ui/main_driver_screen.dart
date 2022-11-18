@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:reinvent_driver_app/main.dart';
-import 'package:reinvent_driver_app/models/ModelProvider.dart';
 
 class MainDriverScreen extends StatefulWidget {
   const MainDriverScreen({super.key});

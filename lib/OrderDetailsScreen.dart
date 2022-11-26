@@ -1,9 +1,6 @@
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:reinvent_driver_app/models/Order.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 import 'models/Customer.dart';
@@ -29,7 +26,9 @@ class OrderDetailsScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('Name: ${args.customer!.firstName}'),
+                    args.customer?.firstName != null
+                        ? Text('Name: ${args.customer!.firstName}')
+                        : const Text('Name: Mohit'),
                     ElevatedButton(
                         onPressed: () {
                           MapsLauncher.launchQuery(mapsQuery);

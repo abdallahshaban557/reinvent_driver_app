@@ -1,17 +1,26 @@
-import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'OrderDetailsScreen.dart';
 import 'features/driver_app_files/ui/main_driver_screen.dart';
-import 'models/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:amplify_api/amplify_api.dart';
+import 'models/ModelProvider.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'amplifyconfiguration.dart';
 
 part 'main.g.dart';
+
+Future<void> _configureAmplify() async {
+  await Amplify.addPlugins([
+    AmplifyAuthCognito(),
+    AmplifyAPI(modelProvider: ModelProvider.instance),
+  ]);
+  await Amplify.configure(amplifyconfig);
+}
 
 @riverpod
 Future<List<Order?>> getListOfOrders(GetListOfOrdersRef ref) async {
@@ -116,12 +125,4 @@ Future<void> main() async {
       ),
     ),
   );
-}
-
-Future<void> _configureAmplify() async {
-  await Amplify.addPlugins([
-    AmplifyAuthCognito(),
-    AmplifyAPI(modelProvider: ModelProvider.instance),
-  ]);
-  await Amplify.configure(amplifyconfig);
 }

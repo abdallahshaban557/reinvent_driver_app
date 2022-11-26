@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:reinvent_driver_app/main.dart';
 import 'package:reinvent_driver_app/models/Order.dart';
 import 'package:reinvent_driver_app/models/OrderStatus.dart';
+import 'package:amplify_api/amplify_api.dart';
+import '../../../models/ModelProvider.dart';
 
 class MainDriverScreen extends StatefulWidget {
   const MainDriverScreen({super.key});
@@ -43,7 +45,7 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
         ),
         body: const SafeArea(
           child: TabBarView(
-            children: [AssignedViewWidget(), HistoryViewWidget()],
+            children: [StreamAssignedView(), HistoryViewWidget()],
           ),
         ),
       ),
@@ -198,7 +200,7 @@ class StreamAssignedViewWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final getOrders = ref.read(getListOfAssignedOrdersProvider);
+    final getOrders = ref.watch(combinedOrderListProvider);
     return getOrders.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text('Error: $error'),

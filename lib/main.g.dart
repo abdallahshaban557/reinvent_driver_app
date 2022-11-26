@@ -29,6 +29,37 @@ class _SystemHash {
   }
 }
 
+String $subscribeHash() => r'19ce0280803861e3bb08057ae7bd7da637192388';
+
+/// See also [subscribe].
+final subscribeProvider = AutoDisposeProvider<Stream<GraphQLResponse<Order>>>(
+  subscribe,
+  name: r'subscribeProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : $subscribeHash,
+);
+typedef SubscribeRef = AutoDisposeProviderRef<Stream<GraphQLResponse<Order>>>;
+String $combinedOrderListHash() => r'c46a23efa8acf8f49a8a73d531800412e3936137';
+
+/// See also [combinedOrderList].
+final combinedOrderListProvider = AutoDisposeFutureProvider<List<Order?>>(
+  combinedOrderList,
+  name: r'combinedOrderListProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $combinedOrderListHash,
+);
+typedef CombinedOrderListRef = AutoDisposeFutureProviderRef<List<Order?>>;
+String $subscribedHash() => r'f2b52d423290f1dce98b4548b1a71a6843b2abbe';
+
+/// See also [subscribed].
+final subscribedProvider = AutoDisposeProvider<Stream<List<Order>>>(
+  subscribed,
+  name: r'subscribedProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : $subscribedHash,
+);
+typedef SubscribedRef = AutoDisposeProviderRef<Stream<List<Order>>>;
 String $getListOfOrdersHash() => r'8b9b2f06625938cb89d7762bf0458123603fadb8';
 
 /// See also [getListOfOrders].
@@ -41,7 +72,7 @@ final getListOfOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(
 );
 typedef GetListOfOrdersRef = AutoDisposeFutureProviderRef<List<Order?>>;
 String $getListOfAssignedOrdersHash() =>
-    r'81a57c79ac47037eca2dbcaf01fddede4cedb672';
+    r'07100fe0012c704471da4ee0e1acf135f2ca5554';
 
 /// See also [getListOfAssignedOrders].
 final getListOfAssignedOrdersProvider = AutoDisposeFutureProvider<List<Order?>>(

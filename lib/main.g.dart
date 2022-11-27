@@ -39,7 +39,7 @@ final subscribeProvider = AutoDisposeProvider<Stream<GraphQLResponse<Order>>>(
       const bool.fromEnvironment('dart.vm.product') ? null : $subscribeHash,
 );
 typedef SubscribeRef = AutoDisposeProviderRef<Stream<GraphQLResponse<Order>>>;
-String $subscribedHash() => r'f2b52d423290f1dce98b4548b1a71a6843b2abbe';
+String $subscribedHash() => r'844909dc1af38d69ba093e1f8c46c299da1ca6fb';
 
 /// See also [subscribed].
 final subscribedProvider = AutoDisposeProvider<Stream<List<Order>>>(

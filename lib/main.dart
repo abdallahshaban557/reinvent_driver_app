@@ -105,7 +105,7 @@ Stream<List<Order>> subscribed(SubscribedRef ref) {
   final streamUpdates = ref.watch(subscribeProvider);
   streamUpdates.listen((event) {
     final order = event.data;
-    safePrint("testing");
+    safePrint("new order");
     if (order != null) {
       allOrders.add(order);
       controller.add(allOrders);

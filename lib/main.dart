@@ -57,33 +57,33 @@ subscription MySubscription {
   return operation;
 }
 
-//combining two providers
-@riverpod
-Future<List<Order?>> combinedOrderList(CombinedOrderListRef ref) async {
-  List<Order?> listOfOrdersList = <Order>[];
+//combining two providers - not using this now
+// @riverpod
+// Future<List<Order?>> combinedOrderList(CombinedOrderListRef ref) async {
+//   List<Order?> listOfOrdersList = <Order>[];
 
-  final initiallistOfOrders = ref.watch(getListOfAssignedOrdersProvider);
-  initiallistOfOrders.when(
-      data: ((data) {
-        listOfOrdersList = data;
-      }),
-      error: (error, stackTrace) => safePrint("issue"),
-      loading: () {});
+//   final initiallistOfOrders = ref.watch(getListOfAssignedOrdersProvider);
+//   initiallistOfOrders.when(
+//       data: ((data) {
+//         listOfOrdersList = data;
+//       }),
+//       error: (error, stackTrace) => safePrint("issue"),
+//       loading: () {});
 
-  final streamUpdates = ref.watch(subscribeProvider);
-  streamUpdates.listen((event) {
-    safePrint(listOfOrdersList.length);
-    // listOfOrdersList.add(event.data);
-    final order = event.data;
-    if (order != null) {
-      listOfOrdersList.add(order);
-    }
-    safePrint(order);
-    ref.refresh(combinedOrderListProvider);
-  });
+//   final streamUpdates = ref.watch(subscribeProvider);
+//   streamUpdates.listen((event) {
+//     safePrint(listOfOrdersList.length);
+//     // listOfOrdersList.add(event.data);
+//     final order = event.data;
+//     if (order != null) {
+//       listOfOrdersList.add(order);
+//     }
+//     safePrint(order);
+//     ref.refresh(combinedOrderListProvider);
+//   });
 
-  return listOfOrdersList;
-}
+//   return listOfOrdersList;
+// }
 
 @riverpod
 Stream<List<Order>> subscribed(SubscribedRef ref) {

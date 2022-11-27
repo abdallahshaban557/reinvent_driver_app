@@ -39,17 +39,6 @@ final subscribeProvider = AutoDisposeProvider<Stream<GraphQLResponse<Order>>>(
       const bool.fromEnvironment('dart.vm.product') ? null : $subscribeHash,
 );
 typedef SubscribeRef = AutoDisposeProviderRef<Stream<GraphQLResponse<Order>>>;
-String $combinedOrderListHash() => r'13426dbcef4043c03023120070dae11beb0f7cf9';
-
-/// See also [combinedOrderList].
-final combinedOrderListProvider = AutoDisposeFutureProvider<List<Order?>>(
-  combinedOrderList,
-  name: r'combinedOrderListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : $combinedOrderListHash,
-);
-typedef CombinedOrderListRef = AutoDisposeFutureProviderRef<List<Order?>>;
 String $subscribedHash() => r'f2b52d423290f1dce98b4548b1a71a6843b2abbe';
 
 /// See also [subscribed].

@@ -193,7 +193,7 @@ class AssignedViewWidget extends ConsumerWidget {
   }
 }
 
-// works but updates get called twice
+// works but updates get called twice - not using this anymore
 // class StreamAssignedViewWidget extends ConsumerWidget {
 //   const StreamAssignedViewWidget({
 //     Key? key,

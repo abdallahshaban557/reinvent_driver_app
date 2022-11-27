@@ -45,7 +45,7 @@ class _MainDriverScreenState extends State<MainDriverScreen> {
         ),
         body: const SafeArea(
           child: TabBarView(
-            children: [StreamAssignedView(), HistoryViewWidget()],
+            children: [StreamAssignedViewWidget(), HistoryViewWidget()],
           ),
         ),
       ),
@@ -193,6 +193,80 @@ class AssignedViewWidget extends ConsumerWidget {
   }
 }
 
+// works but updates get called twice
+// class StreamAssignedViewWidget extends ConsumerWidget {
+//   const StreamAssignedViewWidget({
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final getOrders = ref.watch(combinedOrderListProvider);
+//     return getOrders.when(
+//       loading: () => const Center(child: CircularProgressIndicator()),
+//       error: (error, stackTrace) => Text('Error: $error'),
+//       data: (data) {
+//         //safePrint(data.length);
+//         return ListView.separated(
+//           itemCount: data.length,
+//           separatorBuilder: (BuildContext context, int index) => const Divider(
+//             thickness: 1,
+//             color: Colors.black,
+//           ),
+//           itemBuilder: (BuildContext context, int index) {
+//             final DateFormat formatter = DateFormat('yyyy-MM-dd');
+//             //get dateTime from temporalDate
+//             safePrint(data[index]!.id);
+//             final String formatted = formatter
+//                 .format(DateTime.parse(data[index]!.createdAt.toString()));
+//             //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
+//             return ListTile(
+//               onTap: () {
+//                 Navigator.pushNamed(context, '/orderDetails',
+//                     arguments: data[index]);
+//               },
+//               title: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                 children: [
+//                   Column(
+//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                     children: [
+//                       Text(data[index]!.orderstatus.toString().split('.')[1],
+//                           style: TextStyle(
+//                               fontSize: Theme.of(context)
+//                                   .textTheme
+//                                   .titleMedium!
+//                                   .fontSize)),
+//                       Text('order # ${data[index]!.id.split('-')[0]}',
+//                           style: TextStyle(
+//                               fontSize: Theme.of(context)
+//                                   .textTheme
+//                                   .titleSmall!
+//                                   .fontSize)),
+//                     ],
+//                   ),
+//                   Text('\$ ${data[index]?.ordertotal}',
+//                       style: TextStyle(
+//                           fontSize: Theme.of(context)
+//                               .textTheme
+//                               .titleMedium!
+//                               .fontSize)),
+//                   Text(formatted,
+//                       style: TextStyle(
+//                           fontSize: Theme.of(context)
+//                               .textTheme
+//                               .titleMedium!
+//                               .fontSize)),
+//                 ],
+//               ),
+//             );
+//           },
+//         );
+//       },
+//     );
+//   }
+// }
+
 class StreamAssignedViewWidget extends ConsumerWidget {
   const StreamAssignedViewWidget({
     Key? key,
@@ -200,66 +274,74 @@ class StreamAssignedViewWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final getOrders = ref.watch(combinedOrderListProvider);
-    return getOrders.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Text('Error: $error'),
-      data: (data) {
-        safePrint(data.length);
-        return ListView.separated(
-          itemCount: data.length,
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            thickness: 1,
-            color: Colors.black,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            final DateFormat formatter = DateFormat('yyyy-MM-dd');
-            //get dateTime from temporalDate
-            final String formatted = formatter
-                .format(DateTime.parse(data[index]!.createdAt.toString()));
-            //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
-            return ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, '/orderDetails',
-                    arguments: data[index]);
-              },
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(data[index]!.orderstatus.toString().split('.')[1],
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .fontSize)),
-                      Text('order # ${data[index]!.id.split('-')[0]}',
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .fontSize)),
-                    ],
-                  ),
-                  Text('\$ ${data[index]?.ordertotal}',
-                      style: TextStyle(
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .fontSize)),
-                  Text(formatted,
-                      style: TextStyle(
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .fontSize)),
-                ],
-              ),
-            );
-          },
-        );
+    final getOrders = ref.watch(subscribedProvider);
+    //safePrint(data.length);
+    return StreamBuilder(
+      stream: getOrders,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        final DateFormat formatter = DateFormat('yyyy-MM-dd');
+        //get dateTime from temporalDate
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          return ListView.separated(
+            itemCount: data.length,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+              thickness: 1,
+              color: Colors.black,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              final DateFormat formatter = DateFormat('yyyy-MM-dd');
+              //get dateTime from temporalDate
+              safePrint(data[index]!.id);
+              final String formatted = formatter
+                  .format(DateTime.parse(data[index]!.createdAt.toString()));
+              //String date = DateFormat.yMMMd().add_Hm().format(myvalue);
+              return ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, '/orderDetails',
+                      arguments: data[index]);
+                },
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(data[index]!.orderstatus.toString().split('.')[1],
+                            style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .fontSize)),
+                        Text('order # ${data[index]!.id.split('-')[0]}',
+                            style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .fontSize)),
+                      ],
+                    ),
+                    Text('\$ ${data[index]?.ordertotal}',
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .fontSize)),
+                    Text(formatted,
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .fontSize)),
+                  ],
+                ),
+              );
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
       },
     );
   }

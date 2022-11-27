@@ -60,7 +60,7 @@ subscription MySubscription {
 //combining two providers
 @riverpod
 Future<List<Order?>> combinedOrderList(CombinedOrderListRef ref) async {
-  List<Order?> listOfOrdersList = [];
+  List<Order?> listOfOrdersList = <Order>[];
 
   final initiallistOfOrders = ref.watch(getListOfAssignedOrdersProvider);
   initiallistOfOrders.when(
@@ -72,7 +72,14 @@ Future<List<Order?>> combinedOrderList(CombinedOrderListRef ref) async {
 
   final streamUpdates = ref.watch(subscribeProvider);
   streamUpdates.listen((event) {
-    listOfOrdersList.add(event.data);
+    safePrint(listOfOrdersList.length);
+    // listOfOrdersList.add(event.data);
+    final order = event.data;
+    if (order != null) {
+      listOfOrdersList.add(order);
+    }
+    safePrint(order);
+    ref.refresh(combinedOrderListProvider);
   });
 
   return listOfOrdersList;

@@ -279,8 +279,6 @@ class StreamAssignedViewWidget extends ConsumerWidget {
     return StreamBuilder(
       stream: getOrders,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final DateFormat formatter = DateFormat('yyyy-MM-dd');
-        //get dateTime from temporalDate
         if (snapshot.hasData) {
           final data = snapshot.data;
           return ListView.separated(
